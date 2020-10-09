@@ -4,18 +4,21 @@
 #include <cstdint>
 #include <array>
 
+namespace xsm
+{
+
 // template class that implements a ring buffer
 template <size_t N>
-class TRingBuffer
+class xsmRingBuffer
 {
 public:
-	TRingBuffer()
+	xsmRingBuffer()
 	{
 		mSize = N;
 		mHead = mTail = 0;
 	}
 
-	~TRingBuffer()
+	~xsmRingBuffer()
 	{
 	}
 
@@ -62,7 +65,7 @@ public:
 
 	// gets the last inserted byte from the buffer.
 	// returns true on success, false otherwise
-	bool pop(uint8_t &v)
+	bool pop(uint8_t& v)
 	{
 		if (mHead == mTail)
 		{
@@ -102,7 +105,7 @@ public:
 
 	// gets the element at index from the buffer.
 	// returns true on success, false otherwise
-	bool get(size_t index, uint8_t &v) const
+	bool get(size_t index, uint8_t& v) const
 	{
 		v = mData[(mHead + index) % mSize];
 		return capacity() > 0;
@@ -111,7 +114,7 @@ public:
 	// gets "length" elements from the buffer starting from "index"
 	// into buffer
 	// returns true on success, false otherwise
-	bool get(size_t index, uint8_t *buffer, size_t length) const
+	bool get(size_t index, uint8_t* buffer, size_t length) const
 	{
 		if (capacity() >= length)
 		{
@@ -136,4 +139,5 @@ private:
 	size_t mTail;
 };
 
+}
 #endif

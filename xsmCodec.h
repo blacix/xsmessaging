@@ -2,7 +2,7 @@
 #define _XSM_CODEC
 
 // project includes
-#include "RingBuffer.h"
+#include "xsmRingBuffer.h"
 // library includes
 #include <vector>
 #include <array>
@@ -34,7 +34,7 @@ typedef std::array<uint8_t, MAX_PACKET_SIZE> PacketBuffer;
 // buffer for packet header
 typedef std::array<uint8_t, HEADER_SIZE> HeaderBuffer;
 // ringbuffer for incoming data
-typedef TRingBuffer<INPUT_BUFFER_SIZE> RingBuffer;
+typedef xsmRingBuffer<INPUT_BUFFER_SIZE> RingBuffer;
 
 class xsmCodec
 {

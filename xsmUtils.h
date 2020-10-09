@@ -4,11 +4,11 @@
 #include <vector>
 namespace xsm
 {
-class Utils
+class xsmUtils
 {
 public:
-	Utils() = default;
-	~Utils() = default;
+	xsmUtils() = default;
+	~xsmUtils() = default;
 
 	// helper method to convert hex string to byte
 	static uint8_t hexStringToByte(const std::string& hexString);

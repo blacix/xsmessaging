@@ -1,4 +1,4 @@
-﻿#include "Utils.h"
+﻿#include "xsmUtils.h"
 #include <iterator>
 #include <sstream>
 #include <chrono>
@@ -6,7 +6,7 @@
 
 using namespace xsm;
 
-uint8_t Utils::hexStringToByte(const std::string& hexString)
+uint8_t xsmUtils::hexStringToByte(const std::string& hexString)
 {
 	// the return value
 	//uint8_t returnValue = 0;
@@ -28,7 +28,7 @@ uint8_t Utils::hexStringToByte(const std::string& hexString)
 	return static_cast<uint8_t>(value);
 }
 
-std::vector<uint8_t> Utils::hexStringToByteArray(const std::string& hexString)
+std::vector<uint8_t> xsmUtils::hexStringToByteArray(const std::string& hexString)
 {
 	std::vector<uint8_t> retVal;
 	std::stringstream ss(hexString);
@@ -63,7 +63,7 @@ std::vector<uint8_t> Utils::hexStringToByteArray(const std::string& hexString)
 }
 
 
-long long Utils::getCurrentTimestamp()
+long long xsmUtils::getCurrentTimestamp()
 {
 	std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
 		std::chrono::system_clock::now().time_since_epoch());

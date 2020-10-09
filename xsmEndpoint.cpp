@@ -17,7 +17,7 @@ void xsmEndpoint::receive(const uint8_t byte)
 
 void xsmEndpoint::receive(const uint8_t* bytes, size_t size)
 {
-	for (int i = 0; i < size; ++i)
+	for (size_t i = 0; i < size; ++i)
 	{
 		receive(bytes[i]);
 	}

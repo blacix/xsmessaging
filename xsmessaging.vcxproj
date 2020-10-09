@@ -139,15 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="xsmUtils.cpp" />
     <ClCompile Include="xsmApp.cpp" />
     <ClCompile Include="xsmCodec.cpp" />
     <ClCompile Include="xsmEndpoint.cpp" />
     <ClCompile Include="xsmessaging.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RingBuffer.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="xsmRingBuffer.h" />
+    <ClInclude Include="xsmUtils.h" />
     <ClInclude Include="xsmApp.h" />
     <ClInclude Include="xsmCodec.h" />
     <ClInclude Include="xsmEndpoint.h" />

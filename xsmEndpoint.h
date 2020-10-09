@@ -1,6 +1,6 @@
 #ifndef XSM_ENDPOINT
 #define XSM_ENDPOINT
-#include "RingBuffer.h"
+#include "xsmRingBuffer.h"
 #include "xsmCodec.h"
 #include <functional>
 namespace xsm
