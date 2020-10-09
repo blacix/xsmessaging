@@ -1,6 +1,6 @@
 # xsmessaging
 
-xsmessaging is a extra small messaging library for stream based communication.
+xsmessaging is an extra small messaging library for stream based communication.
 
   - it defines a simple packet format with delimiter and escape charcter
   - it uses crc for integrity check
