@@ -7,11 +7,10 @@ size_t xsmCodec::encode(const PayloadBuffer& unEscapedPayload,
                         const size_t unEscapedPayloadSize,
                         PacketBuffer& encodedData) {
   // perform escaping in member buffer. this might makes the payload bigger
-  size_t escapedPayloadBufferSize = xsm::xsmCodec::escape(unEscapedPayload, unEscapedPayloadSize, mEscapeHelperBuffer);
+  size_t escapedPayloadBufferSize = escape(unEscapedPayload, unEscapedPayloadSize, mEscapeHelperBuffer);
   
   // now mEscapeHelperBuffer holds the escaped payload
   // assemble the packet and return its size.
-  
   if (escapedPayloadBufferSize > 0)
     return assemble(mEscapeHelperBuffer, escapedPayloadBufferSize, encodedData);
   else
@@ -104,7 +103,7 @@ size_t xsmCodec::decode(const RingBuffer& encodedPackets, std::vector<PacketBuff
 }
 
 // CRC for Maxim/Dallas 1-Wire
-uint8_t xsmCodec::crc8(const uint8_t* buffer, size_t size) {
+uint8_t xsmCodec::crc8(const uint8_t* buffer, const uint8_t size) {
   uint8_t crc = 0;
   uint8_t sum = 0;
   for (size_t i = 0; i < size; i++) {
@@ -174,7 +173,8 @@ size_t xsmCodec::assemble(const PayloadBuffer& escapedPayload, const size_t esca
   // post incremented indexes become sizes
 
   // add footer: payload crc
-  encodedPacket[headerIndex + payloadIndex] = crc8(encodedPacket.data() + HEADER_SIZE, escapedPayloadSize);
+  encodedPacket[headerIndex + payloadIndex] = crc8(escapedPayload.data(), escapedPayloadSize);
+
 
 
   // std::stringstream ss;

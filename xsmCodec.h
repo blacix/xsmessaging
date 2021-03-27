@@ -52,7 +52,7 @@ public:
   size_t decode(const RingBuffer& encodedPackets, std::vector<PacketBuffer>& decodedPackets);
 
   // a simple crc8 implementation
-  static uint8_t crc8(const uint8_t* buffer, size_t size);
+  static uint8_t crc8(const uint8_t* buffer, const uint8_t size);
 
 
 private:
