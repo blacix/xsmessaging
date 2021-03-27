@@ -2,7 +2,7 @@
 #define XSM_APP
 #include <functional>
 #include <vector>
-#include "xsmCodec.h"
+#include "xsmDecoder.h"
 namespace xsm
 {
 class xsmApp

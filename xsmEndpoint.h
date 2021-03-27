@@ -2,8 +2,11 @@
 #define XSM_ENDPOINT
 #include <functional>
 
-#include "xsmCodec.h"
+#include "xsmCoder.h"
+#include "xsmDecoder.h"
 #include "xsmRingBuffer.h"
+
+
 namespace xsm {
 
 class xsmEndpoint {
@@ -20,7 +23,8 @@ private:
 
   std::function<void(std::vector<PacketBuffer>)> mCallback;
   RingBuffer mBufferIn;
-  xsmCodec mProtocolCodec;
+  xsmDecoder mProtocolCodec;
+  xsmCoder mProtocolCoder;
   std::vector<PacketBuffer> mReceivedPackets;
 };
 

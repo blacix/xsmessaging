@@ -139,21 +139,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CRCMaximDallas.cpp" />
     <ClCompile Include="xsmAppUtils.cpp" />
     <ClCompile Include="xsmApp.cpp" />
-    <ClCompile Include="xsmCodec.cpp" />
+    <ClCompile Include="xsmDecoder.cpp" />
+    <ClCompile Include="xsmCoder.cpp" />
     <ClCompile Include="xsmEndpoint.cpp" />
     <ClCompile Include="xsmessaging.cpp" />
     <ClCompile Include="xsmUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CRCMaximDallas.h" />
+    <ClInclude Include="xsmCoder.h" />
     <ClInclude Include="xsmDefines.h" />
     <ClInclude Include="xsmTypes.h" />
     <ClInclude Include="xsmRingBuffer.h" />
     <ClInclude Include="xsmAppUtils.h" />
     <ClInclude Include="xsmApp.h" />
-    <ClInclude Include="xsmCodec.h" />
+    <ClInclude Include="xsmDecoder.h" />
     <ClInclude Include="xsmEndpoint.h" />
     <ClInclude Include="xsmUtils.h" />
   </ItemGroup>

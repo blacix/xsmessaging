@@ -21,7 +21,7 @@
     <ClCompile Include="xsmApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xsmCodec.cpp">
+    <ClCompile Include="xsmDecoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="xsmEndpoint.cpp">
@@ -33,12 +33,18 @@
     <ClCompile Include="xsmUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="xsmCoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CRCMaximDallas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xsmApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="xsmCodec.h">
+    <ClInclude Include="xsmDecoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xsmEndpoint.h">
@@ -60,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xsmDefines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xsmCoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
