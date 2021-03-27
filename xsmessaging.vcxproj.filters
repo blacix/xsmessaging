@@ -27,7 +27,7 @@
     <ClCompile Include="xsmEndpoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xsmUtils.cpp">
+    <ClCompile Include="xsmAppUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,7 +44,7 @@
     <ClInclude Include="xsmRingBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="xsmUtils.h">
+    <ClInclude Include="xsmAppUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CRCMaximDallas.h">

@@ -1,13 +1,13 @@
-﻿#ifndef _UTILS_H
-#define _UTILS_H
+﻿#ifndef _XSM_APP_UTILS_H
+#define _XSM_APP_UTILS_H
 #include <string>
 #include <vector>
 
 namespace xsm {
-class xsmUtils {
+class xsmAppUtils {
 public:
-  xsmUtils() = default;
-  ~xsmUtils() = default;
+  xsmAppUtils() = default;
+  ~xsmAppUtils() = default;
 
   // helper method to convert hex string to byte
   static uint8_t hexStringToByte(const std::string& hexString);

@@ -1,4 +1,4 @@
-﻿#include "xsmUtils.h"
+﻿#include "xsmAppUtils.h"
 
 #include <chrono>
 #include <cinttypes>
@@ -7,7 +7,7 @@
 
 using namespace xsm;
 
-uint8_t xsmUtils::hexStringToByte(const std::string& hexString) {
+uint8_t xsmAppUtils::hexStringToByte(const std::string& hexString) {
   // the return value
   // uint8_t returnValue = 0;
   // less safe but in many implementations legacy C string functions
@@ -28,7 +28,7 @@ uint8_t xsmUtils::hexStringToByte(const std::string& hexString) {
   return static_cast<uint8_t>(value);
 }
 
-std::vector<uint8_t> xsmUtils::hexStringToByteArray(const std::string& hexString) {
+std::vector<uint8_t> xsmAppUtils::hexStringToByteArray(const std::string& hexString) {
   std::vector<uint8_t> retVal;
   std::stringstream ss(hexString);
   ss << std::hex;
@@ -59,7 +59,7 @@ std::vector<uint8_t> xsmUtils::hexStringToByteArray(const std::string& hexString
 }
 
 
-long long xsmUtils::getCurrentTimestamp() {
+long long xsmAppUtils::getCurrentTimestamp() {
   std::chrono::milliseconds ms
       = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
   return ms.count();
