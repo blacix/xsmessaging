@@ -39,7 +39,7 @@ typedef xsmRingBuffer<INPUT_BUFFER_SIZE> RingBuffer;
 class xsmCodec {
 
 public:
-  xsmCodec();
+  xsmCodec() = default;
   ~xsmCodec() = default;
   // Encodes the payload provided as input into encodedBuffer that is the output.
   // First it escapes the necessary characters in the payload than assembles the packet

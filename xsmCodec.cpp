@@ -1,17 +1,7 @@
 #include "xsmCodec.h"
 
-// project includes
-#include "xsmCodec.h"
-
-// library includes
-
-
 using namespace xsm;
 
-
-xsmCodec::xsmCodec() {
-
-}
 
 size_t xsmCodec::encode(const PayloadBuffer& unEscapedPayload,
                         const size_t unEscapedPayloadSize,

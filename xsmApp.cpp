@@ -14,7 +14,5 @@ xsmApp::xsmApp() {
 }
 
 void xsmApp::onMessageReceived(std::vector<PacketBuffer> packets) {
-  for (const PacketBuffer& packet : packets) {
-    std::cout << "packet received: " << std::endl;
-  }
+  std::cout << "packet received: " << packets.size() << std::endl;
 }
