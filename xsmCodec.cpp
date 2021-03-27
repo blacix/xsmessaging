@@ -10,29 +10,25 @@ using namespace xsm;
 
 
 xsmCodec::xsmCodec() {
-  // allocating memory in advance will prevent the app from the need of
-  // memory reallocations
 
-  // allocate memory for escaping. it is double the size of the max buffer
-  // because if every byte should be escaped in the payload it doubles the size
-  mEscapeHelperBuffer = std::vector<uint8_t>(2 * MAX_PAYLOAD_SIZE);
-  // allocate memory for incoming packet that is processed from the inut buffer
-  mPotentialPayload = std::vector<uint8_t>(MAX_PAYLOAD_SIZE);
 }
 
-size_t xsmCodec::encode(const std::vector<uint8_t>& unescapedPayload, PacketBuffer& encodedPacket) {
+size_t xsmCodec::encode(const PayloadBuffer& unEscapedPayload,
+                        const size_t unEscapedPayloadSize,
+                        PacketBuffer& encodedData) {
   // perform escaping in member buffer. this might makes the payload bigger
-  escape(unescapedPayload, mEscapeHelperBuffer);
+  size_t escapedPayloadBufferSize = xsm::xsmCodec::escape(unEscapedPayload, unEscapedPayloadSize, mEscapeHelperBuffer);
+  
   // now mEscapeHelperBuffer holds the escaped payload
   // assemble the packet and return its size.
-  // if the escaped buffer has got too large, return 0 as failure
-  if (mEscapeHelperBuffer.size() < MAX_PACKET_SIZE)
-    return assemble(mEscapeHelperBuffer, encodedPacket);
+  
+  if (escapedPayloadBufferSize > 0)
+    return assemble(mEscapeHelperBuffer, escapedPayloadBufferSize, encodedData);
   else
     return 0;
 }
 
-// The ProtocolConfgi::decode function uses a naive approach, that is,
+// The ProtocolConfig::decode function uses a naive approach, that is,
 // it always starts interpreting the input buffer from the beginning.This has, of course, impact on the performance.
 size_t xsmCodec::decode(const RingBuffer& encodedPackets, std::vector<PacketBuffer>& decodedPackets) {
   // number of bytes processed in the
@@ -66,16 +62,12 @@ size_t xsmCodec::decode(const RingBuffer& encodedPackets, std::vector<PacketBuff
           if (encodedPackets.capacity() >= i + packetLength) {
             // extract payload
 
-            // note that memory is preallocated in the constructor
-            mPotentialPayload.clear();               // this won't free the preallocated mem
-            mPotentialPayload.resize(payloadLength); // this neither
-
             // copy payload to mPotentialPayload buffer
             encodedPackets.get(i + HEADER_SIZE, mPotentialPayload.data(), payloadLength);
 
             // if there is unescaped delimiter in the payload that might be the start of a new packet
             // discard everything before it
-            int delimiterIndex = unescapedDelimiterPos(mPotentialPayload);
+            int delimiterIndex = unescapedDelimiterPos(mPotentialPayload, payloadLength);
             if (delimiterIndex > 0) {
               // discard all before this index
               bytesProcessed = i + HEADER_SIZE + delimiterIndex;
@@ -83,12 +75,12 @@ size_t xsmCodec::decode(const RingBuffer& encodedPackets, std::vector<PacketBuff
               // check payload crc
               uint8_t payloadCrc = 0;
               encodedPackets.get(i + HEADER_SIZE + payloadLength, payloadCrc);
-              if (crc8(mPotentialPayload.data(), mPotentialPayload.size()) == payloadCrc) {
+              if (crc8(mPotentialPayload.data(), payloadLength) == payloadCrc) {
                 // remove escape characters
-                unescape(mPotentialPayload);
+                unescape(mPotentialPayload, payloadLength, mEscapeHelperBuffer);
                 // add it to the output array of payloads
                 PacketBuffer packet;
-                std::copy(mPotentialPayload.begin(), mPotentialPayload.end(), packet.begin());
+                std::copy(mEscapeHelperBuffer.begin(), mEscapeHelperBuffer.end(), packet.begin());
                 decodedPackets.push_back(packet);
 
                 // move on to processing the next packet
@@ -139,30 +131,39 @@ uint8_t xsmCodec::crc8(const uint8_t* buffer, size_t size) {
 }
 
 
-void xsmCodec::escape(const std::vector<uint8_t>& payload, std::vector<uint8_t>& escapedPayload) {
-  // clear output buffer whatever it contained
-  escapedPayload.clear(); // this will not free memory in the buffer
+size_t xsmCodec::escape(const PayloadBuffer& unescapedPayload,
+                        const size_t unescapedPayloadSize,
+                        PayloadBuffer& escapedPayload) {
+
+  size_t escapedPayloadSize = 0;
   // iterate through the input payload buffer and insert escaped payload in the
   // escapedPayload output buffer
-  for (auto it = payload.begin(); it != payload.end(); it++) {
-    uint8_t b = *it;
+  for (size_t i = 0; i < unescapedPayloadSize; i++) {
+    uint8_t b = unescapedPayload[i];
     // don't escape the frame delimiter at first position
-    if (it != payload.begin()) {
+    if (i != 0) {
       // the frame delimiter and the escape byte itself are to be escaped
       if (b == FRAME_DELIMITER || b == ESCAPE_BYTE) {
-        escapedPayload.push_back(ESCAPE_BYTE);
+        escapedPayload[i] = ESCAPE_BYTE;
+        ++escapedPayloadSize;
+        if (escapedPayloadSize > unescapedPayloadSize) {
+          return 0;
+        }
       }
     }
-    escapedPayload.push_back(b);
+    escapedPayload[escapedPayloadSize] = b;
+    ++escapedPayloadSize;
   }
+
+  return escapedPayloadSize;
 }
 
 
-size_t xsmCodec::assemble(const std::vector<uint8_t>& escapedPayload, PacketBuffer& encodedPacket) {
+size_t xsmCodec::assemble(const PayloadBuffer& escapedPayload, const size_t escapedPayloadSize, PacketBuffer& encodedPacket) {
   // if the escaped data provided is too large, it won't fit in a max size packet
   // this is checked outside as well, but this being a public static method
   // it is better to make sure noone calls it with a wrong parameter
-  if (escapedPayload.size() > MAX_PAYLOAD_SIZE)
+  if (escapedPayloadSize > MAX_PAYLOAD_SIZE)
     return 0;
 
   // assemble the header
@@ -170,20 +171,20 @@ size_t xsmCodec::assemble(const std::vector<uint8_t>& escapedPayload, PacketBuff
   // add frame delimiter first
   encodedPacket[headerIndex++] = FRAME_DELIMITER;
   // add payload length
-  encodedPacket[headerIndex++] = static_cast<uint8_t>(escapedPayload.size());
+  encodedPacket[headerIndex++] = static_cast<uint8_t>(escapedPayloadSize);
   // add header crc
   encodedPacket[headerIndex++] = crc8(encodedPacket.data(), 2);
 
-  // copy header and escaped payload the packet buffer
+  // copy header and escaped payload to the packet buffer
   size_t payloadIndex = 0;
-  for (; payloadIndex < escapedPayload.size(); payloadIndex++) {
+  for (; payloadIndex < escapedPayloadSize; payloadIndex++) {
     encodedPacket[headerIndex + payloadIndex] = escapedPayload[payloadIndex];
   }
 
   // post incremented indexes become sizes
 
   // add footer: payload crc
-  encodedPacket[headerIndex + payloadIndex] = crc8(encodedPacket.data() + HEADER_SIZE, payloadIndex);
+  encodedPacket[headerIndex + payloadIndex] = crc8(encodedPacket.data() + HEADER_SIZE, escapedPayloadSize);
 
 
   // std::stringstream ss;
@@ -199,34 +200,42 @@ size_t xsmCodec::assemble(const std::vector<uint8_t>& escapedPayload, PacketBuff
 }
 
 
-size_t xsmCodec::unescape(std::vector<uint8_t>& escapedPayload) {
+size_t xsmCodec::unescape(const PayloadBuffer& escapedPayload,
+                          const size_t escapedPayloadSize,
+                          PayloadBuffer& unEscapedPayload) {
   int skippedBytes = 0;
   // helper variable to remove the first escape character only.
   // this is the case when the escape charcter is escaped in the payload
   bool escaped = false;
 
   // iterate through escapedPayload buffer and remove escaped characters
-  for (auto it = escapedPayload.begin(); it != escapedPayload.end(); it++) {
-    if (*it == ESCAPE_BYTE && !escaped) {
-      escaped = true;
-      // remove escape char inplace
-      it = escapedPayload.erase(it);
-      // iterator returned by erase will point after the removed element
-      if (it != escapedPayload.begin())
-        it--;
-      ++skippedBytes;
+  size_t unescapedPayloadSize = 0;
+  for (size_t i = 0; i < escapedPayloadSize; i++) {
+    if (escapedPayload[i] == ESCAPE_BYTE) {
+      if (escaped) {
+        // prev byte was the escape character
+        // this byte is also the escape character
+        escaped = false;
+        // skip this byte
+      } else {
+        // prev byte was not the escape character
+        escaped = true;
+        unEscapedPayload[unescapedPayloadSize] = escapedPayload[i];
+        ++unescapedPayloadSize;
+      }
     } else {
-      escaped = false;
-    }
+      unEscapedPayload[unescapedPayloadSize] = escapedPayload[i];
+      ++unescapedPayloadSize;
+    }    
   }
 
-  return skippedBytes;
+  return unescapedPayloadSize;
 }
 
-int xsmCodec::unescapedDelimiterPos(const std::vector<uint8_t>& buffer) {
+int xsmCodec::unescapedDelimiterPos(const PayloadBuffer& buffer, const size_t bufferSize) {
   uint8_t prevByte = 0;
   // iterate through the buffer
-  for (size_t i = 0; i < buffer.size(); i++) {
+  for (size_t i = 0; i < bufferSize; i++) {
     if (buffer[i] == FRAME_DELIMITER && prevByte != ESCAPE_BYTE) {
       // index found, return it
       return i;

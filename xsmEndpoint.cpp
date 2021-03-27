@@ -36,6 +36,8 @@ void xsmEndpoint::process() {
   }
 }
 
-const size_t xsmEndpoint::createPacket(const std::vector<uint8_t>&& payload, PacketBuffer& packet) {
-  return mProtocolCodec.encode(payload, packet);
+const size_t xsmEndpoint::createPacket(const std::vector<uint8_t>&& data, PacketBuffer& packet) {
+  PayloadBuffer payloadBuffer;
+  std::copy(data.begin(), data.end(), payloadBuffer.begin());
+  return mProtocolCodec.encode(payloadBuffer, data.size(), packet);
 }
