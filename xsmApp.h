@@ -1,21 +1,20 @@
 #ifndef XSM_APP
 #define XSM_APP
-#include <functional>
 #include <vector>
+
 #include "xsmDecoder.h"
 
 
 namespace xsm
 
 {
-class xsmApp
-{
+class xsmApp {
 public:
-	xsmApp();
+  xsmApp();
 
-	void onMessageReceived(std::vector<PacketBuffer> messages);
+  void onMessageReceived(PayloadBuffer payload);
 };
 
-}
+} // namespace xsm
 
 #endif

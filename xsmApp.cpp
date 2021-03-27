@@ -23,6 +23,6 @@ xsmApp::xsmApp() {
   }
 }
 
-void xsmApp::onMessageReceived(std::vector<PacketBuffer> packets) {
-  std::cout << "packet received: " << packets.size() << std::endl;
+void xsmApp::onMessageReceived(PayloadBuffer payload) {
+  std::cout << "packet received" << std::endl;
 }

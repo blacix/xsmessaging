@@ -6,7 +6,7 @@ using namespace xsm;
 
 // The ProtocolConfig::decode function uses a naive approach, that is,
 // it always starts interpreting the input buffer from the beginning.This has, of course, impact on the performance.
-size_t xsmDecoder::decode(const RingBuffer& encodedPackets, std::vector<PacketBuffer>& decodedPackets) {
+size_t xsmDecoder::decode(const RingBuffer& encodedPackets, std::vector<PayloadBuffer>& decodedPackets) {
   // number of bytes processed in the
   size_t bytesProcessed = 0;
   // due to escaping the previusly processed byte need to be tracked
@@ -55,9 +55,9 @@ size_t xsmDecoder::decode(const RingBuffer& encodedPackets, std::vector<PacketBu
                 // remove escape characters
                 xsmUtils::unescape(mPotentialPayload, payloadLength, mEscapeHelperBuffer);
                 // add it to the output array of payloads
-                PacketBuffer packet;
-                std::copy(mEscapeHelperBuffer.begin(), mEscapeHelperBuffer.end(), packet.begin());
-                decodedPackets.push_back(packet);
+                //PacketBuffer packet;
+                //std::copy(mEscapeHelperBuffer.begin(), mEscapeHelperBuffer.end(), packet.begin());
+                decodedPackets.push_back(mPotentialPayload);
 
                 // move on to processing the next packet
                 i += packetLength;
