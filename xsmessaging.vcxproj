@@ -144,14 +144,18 @@
     <ClCompile Include="xsmCodec.cpp" />
     <ClCompile Include="xsmEndpoint.cpp" />
     <ClCompile Include="xsmessaging.cpp" />
+    <ClCompile Include="xsmUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CRCMaximDallas.h" />
+    <ClInclude Include="xsmDefines.h" />
+    <ClInclude Include="xsmTypes.h" />
     <ClInclude Include="xsmRingBuffer.h" />
     <ClInclude Include="xsmAppUtils.h" />
     <ClInclude Include="xsmApp.h" />
     <ClInclude Include="xsmCodec.h" />
     <ClInclude Include="xsmEndpoint.h" />
+    <ClInclude Include="xsmUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

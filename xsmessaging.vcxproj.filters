@@ -30,6 +30,9 @@
     <ClCompile Include="xsmAppUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="xsmUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xsmApp.h">
@@ -48,6 +51,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CRCMaximDallas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xsmUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xsmTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xsmDefines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
