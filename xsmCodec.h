@@ -4,13 +4,12 @@
 // project includes
 #include "xsmRingBuffer.h"
 // library includes
-#include <vector>
 #include <array>
 #include <cstdint>
+#include <vector>
 
 
-namespace xsm
-{
+namespace xsm {
 
 
 // packet delimiter byte
@@ -36,60 +35,56 @@ typedef std::array<uint8_t, HEADER_SIZE> HeaderBuffer;
 // ringbuffer for incoming data
 typedef xsmRingBuffer<INPUT_BUFFER_SIZE> RingBuffer;
 
-class xsmCodec
-{
+class xsmCodec {
 
 public:
+  xsmCodec();
+  ~xsmCodec() = default;
 
-	xsmCodec();
-	~xsmCodec() = default;
+  // Encodes the payload provided as input into encodedBuffer that is the output.
+  // First it escapes the necessary characters in the payload than assembles the packet
+  size_t encode(const std::vector<uint8_t>& payload, PacketBuffer& encodedData);
 
-	// Encodes the payload provided as input into encodedBuffer that is the output.
-	// First it escapes the necessary characters in the payload than assembles the packet
-	size_t encode(const std::vector<uint8_t>& payload, PacketBuffer & encodedData);
+  // Decodes every packet from the encodedData buffer provided as input
+  // into the decodedPackets array that is the output
+  // returns the number of bytes processed in the encodedPayload input buffer
+  // thus the caller can remove processed bytes
+  size_t decode(const RingBuffer& encodedPackets, std::vector<PacketBuffer>& decodedPackets);
 
-	// Decodes every packet from the encodedData buffer provided as input 
-	// into the decodedPackets array that is the output
-	// returns the number of bytes processed in the encodedPayload input buffer
-	// thus the caller can remove processed bytes
-	size_t decode(const RingBuffer & encodedPackets,
-		std::vector<PacketBuffer> & decodedPackets);
-
-	// a simple crc8 implementation
-	static uint8_t crc8(const uint8_t * buffer, size_t size);
+  // a simple crc8 implementation
+  static uint8_t crc8(const uint8_t* buffer, size_t size);
 
 private:
+  // Function to check for characters in the payload that are to be escaped.
+  // These are the Frame Delimiter and the escape character itself.
+  static void escape(const std::vector<uint8_t>& payload, std::vector<uint8_t>& escapedPayload);
 
-	// Function to check for characters in the payload that are to be escaped.
-	// These are the Frame Delimiter and the escape character itself.
-	static void escape(const std::vector<uint8_t>& payload, std::vector<uint8_t>& escapedPayload);
+  // Helper function that takes an escapedPayload as input and assembles the packet
+  // that meets the requirements of the protocol into encodedPayload that is the output.
+  // returns the size of the assembled packet or 0 on error.
+  // The method also demonstartes how using a fixed size array is more difficult than using a dynamic one.
+  // With preallocated std vectors the same functionality is easier to achieve
+  // if heap usage is not an issue.
+  static size_t assemble(const std::vector<uint8_t>& escapedPayload, PacketBuffer& encodedPayload);
 
-	// Helper function that takes an escapedPayload as input and assembles the packet 
-	// that meets the requirements of the protocol into encodedPayload that is the output.
-	// returns the size of the assembled packet or 0 on error.
-	// The method also demonstartes how using a fixed size array is more difficult than using a dynamic one.
-	// With preallocated std vectors the same functionality is easier to achieve
-	// if heap usage is not an issue.
-	static size_t assemble(const std::vector<uint8_t>& escapedPayload, PacketBuffer& encodedPayload);
+  // Helper function to remove escape characters from an escaped payload
+  // returns the number of escae bytes removed from the buffer
+  static size_t unescape(std::vector<uint8_t>& escapedPayload);
 
-	// Helper function to remove escape characters from an escaped payload
-	// returns the number of escae bytes removed from the buffer
-	static size_t unescape(std::vector<uint8_t>& escapedPayload);
+  // helper method that searches for unescaped delimiter in the buffer
+  static int unescapedDelimiterPos(const std::vector<uint8_t>& buffer);
 
-	// helper method that searches for unescaped delimiter in the buffer
-	static int unescapedDelimiterPos(const std::vector<uint8_t>& buffer);
+  // preallocated helper buffer for escaping
+  std::vector<uint8_t> mEscapeHelperBuffer;
+  // preallocated buffer for incoming payload
+  std::vector<uint8_t> mPotentialPayload;
+  // preallocated buffer for incoming header
+  HeaderBuffer mHeader;
 
-	// preallocated helper buffer for escaping
-	std::vector<uint8_t> mEscapeHelperBuffer;
-	// preallocated buffer for incoming payload
-	std::vector<uint8_t> mPotentialPayload;
-	// preallocated buffer for incoming header
-	HeaderBuffer mHeader;
-
-	unsigned long long mDiscardedBytes = 0;
+  unsigned long long mDiscardedBytes = 0;
 };
 
 
-}
+} // namespace xsm
 
 #endif
