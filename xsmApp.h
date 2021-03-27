@@ -4,17 +4,12 @@
 
 #include "xsmDecoder.h"
 
-
-namespace xsm
-
-{
 class xsmApp {
 public:
   xsmApp();
 
-  void onMessageReceived(PayloadBuffer payload);
+  void onMessageReceived(xsm::PayloadBuffer payload);
 };
 
-} // namespace xsm
 
 #endif

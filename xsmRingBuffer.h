@@ -8,14 +8,14 @@ namespace xsm {
 
 // template class that implements a ring buffer
 template <size_t N>
-class xsmRingBuffer {
+class RingBufferT {
 public:
-  xsmRingBuffer() {
+  RingBufferT() {
     mSize = N;
     mHead = mTail = 0;
   }
 
-  ~xsmRingBuffer() {}
+  ~RingBufferT() {}
 
   // returns the number of bytes in the buffer
   size_t capacity() const {

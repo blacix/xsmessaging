@@ -9,9 +9,9 @@
 
 namespace xsm {
 
-class xsmEndpoint {
+class Endpoint {
 public:
-  xsmEndpoint(std::function<void(PayloadBuffer)>);
+  Endpoint(std::function<void(PayloadBuffer)>);
   void receive(const uint8_t byte);
   void receive(const uint8_t* bytes, size_t size);
   void receive(const std::vector<uint8_t>& bytes);
@@ -23,8 +23,8 @@ private:
 
   std::function<void(PayloadBuffer)> mCallback;
   RingBuffer mBufferIn;
-  xsmDecoder mProtocolCodec;
-  xsmCoder mProtocolCoder;
+  Decoder mProtocolCodec;
+  Coder mProtocolCoder;
   std::vector<PayloadBuffer> mReceivedPackets;
 };
 

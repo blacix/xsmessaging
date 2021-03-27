@@ -4,14 +4,13 @@
 
 #include "xsmEndpoint.h"
 
-using namespace xsm;
 
 xsmApp::xsmApp() {
-  xsmEndpoint ep(std::bind(&xsmApp::onMessageReceived, this, std::placeholders::_1));
+  xsm::Endpoint ep(std::bind(&xsmApp::onMessageReceived, this, std::placeholders::_1));
 
   uint8_t data[256];
 
-  PacketBuffer packet;
+  xsm::PacketBuffer packet;
   size_t packetSize = ep.createPacket({'a', 'b', 'c'}, packet);
   std::copy(packet.begin(), packet.end(), data);
 
@@ -23,6 +22,6 @@ xsmApp::xsmApp() {
   }
 }
 
-void xsmApp::onMessageReceived(PayloadBuffer payload) {
+void xsmApp::onMessageReceived(xsm::PayloadBuffer payload) {
   std::cout << "packet received" << std::endl;
 }

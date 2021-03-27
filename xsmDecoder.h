@@ -10,11 +10,11 @@
 
 namespace xsm {
 
-class xsmDecoder {
+class Decoder {
 
 public:
-  xsmDecoder() = default;
-  ~xsmDecoder() = default;
+  Decoder() = default;
+  ~Decoder() = default;
 
 
   // Decodes every packet from the encodedData buffer provided as input

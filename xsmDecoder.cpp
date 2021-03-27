@@ -6,7 +6,7 @@ using namespace xsm;
 
 // The ProtocolConfig::decode function uses a naive approach, that is,
 // it always starts interpreting the input buffer from the beginning.This has, of course, impact on the performance.
-size_t xsmDecoder::decode(const RingBuffer& encodedPackets, std::vector<PayloadBuffer>& decodedPackets) {
+size_t Decoder::decode(const RingBuffer& encodedPackets, std::vector<PayloadBuffer>& decodedPackets) {
   // number of bytes processed in the
   size_t bytesProcessed = 0;
   // due to escaping the previusly processed byte need to be tracked
@@ -43,7 +43,7 @@ size_t xsmDecoder::decode(const RingBuffer& encodedPackets, std::vector<PayloadB
 
             // if there is unescaped delimiter in the payload that might be the start of a new packet
             // discard everything before it
-            int delimiterIndex = xsmUtils::unescapedDelimiterPos(mPotentialPayload, payloadLength);
+            int delimiterIndex = Utils::unescapedDelimiterPos(mPotentialPayload, payloadLength);
             if (delimiterIndex > 0) {
               // discard all before this index
               bytesProcessed = i + HEADER_SIZE + delimiterIndex;
@@ -53,7 +53,7 @@ size_t xsmDecoder::decode(const RingBuffer& encodedPackets, std::vector<PayloadB
               encodedPackets.get(i + HEADER_SIZE + payloadLength, payloadCrc);
               if (crc8MaximDallas(mPotentialPayload.data(), payloadLength) == payloadCrc) {
                 // remove escape characters
-                xsmUtils::unescape(mPotentialPayload, payloadLength, mEscapeHelperBuffer);
+                Utils::unescape(mPotentialPayload, payloadLength, mEscapeHelperBuffer);
                 // add it to the output array of payloads
                 //PacketBuffer packet;
                 //std::copy(mEscapeHelperBuffer.begin(), mEscapeHelperBuffer.end(), packet.begin());

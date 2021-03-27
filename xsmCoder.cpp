@@ -6,11 +6,11 @@
 using namespace xsm;
 
 
-size_t xsmCoder::encode(const PayloadBuffer& unEscapedPayload,
+size_t Coder::encode(const PayloadBuffer& unEscapedPayload,
                         const size_t unEscapedPayloadSize,
                         PacketBuffer& encodedData) {
   // perform escaping in member buffer. this might makes the payload bigger
-  size_t escapedPayloadBufferSize = xsmUtils::escape(unEscapedPayload, unEscapedPayloadSize, mEscapeHelperBuffer);
+  size_t escapedPayloadBufferSize = Utils::escape(unEscapedPayload, unEscapedPayloadSize, mEscapeHelperBuffer);
 
   // now mEscapeHelperBuffer holds the escaped payload
   // assemble the packet and return its size.
@@ -20,7 +20,7 @@ size_t xsmCoder::encode(const PayloadBuffer& unEscapedPayload,
     return 0;
 }
 
-size_t xsmCoder::assemble(const PayloadBuffer& escapedPayload,
+size_t Coder::assemble(const PayloadBuffer& escapedPayload,
                           const size_t escapedPayloadSize,
                           PacketBuffer& encodedPacket) {
   // if the escaped data provided is too large, it won't fit in a max size packet

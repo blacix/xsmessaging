@@ -3,26 +3,26 @@
 #include <iostream>
 using namespace xsm;
 
-xsmEndpoint::xsmEndpoint(std::function<void(PayloadBuffer)> callback) : mCallback(callback) {}
+Endpoint::Endpoint(std::function<void(PayloadBuffer)> callback) : mCallback(callback) {}
 
-void xsmEndpoint::receive(const uint8_t byte) {
+void Endpoint::receive(const uint8_t byte) {
   mBufferIn.push(byte);
   process();
 }
 
-void xsmEndpoint::receive(const uint8_t* bytes, size_t size) {
+void Endpoint::receive(const uint8_t* bytes, size_t size) {
   for (size_t i = 0; i < size; ++i) {
     receive(bytes[i]);
   }
 }
 
-void xsmEndpoint::receive(const std::vector<uint8_t>& bytes) {
+void Endpoint::receive(const std::vector<uint8_t>& bytes) {
   for (auto it = bytes.begin(); it != bytes.end(); ++it) {
     receive(*it);
   }
 }
 
-void xsmEndpoint::process() {
+void Endpoint::process() {
   size_t byteProcessed = mProtocolCodec.decode(mBufferIn, mReceivedPackets);
 
   // remove the bytes from the buffer that are already processed
@@ -38,7 +38,7 @@ void xsmEndpoint::process() {
   }
 }
 
-const size_t xsmEndpoint::createPacket(const std::vector<uint8_t>&& data, PacketBuffer& packet) {
+const size_t Endpoint::createPacket(const std::vector<uint8_t>&& data, PacketBuffer& packet) {
   PayloadBuffer payloadBuffer;
   std::copy(data.begin(), data.end(), payloadBuffer.begin());
   return mProtocolCoder.encode(payloadBuffer, data.size(), packet);

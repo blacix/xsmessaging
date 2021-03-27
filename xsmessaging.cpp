@@ -2,6 +2,6 @@
 #include "xsmApp.h"
 int main()
 {
-    xsm::xsmApp();
+    xsmApp();
     getchar();
 }

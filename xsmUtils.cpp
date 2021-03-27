@@ -2,7 +2,7 @@
 
 using namespace xsm;
 
-size_t xsmUtils::escape(const PayloadBuffer& unescapedPayload,
+size_t Utils::escape(const PayloadBuffer& unescapedPayload,
                         const size_t unescapedPayloadSize,
                         PayloadBuffer& escapedPayload) {
 
@@ -29,7 +29,7 @@ size_t xsmUtils::escape(const PayloadBuffer& unescapedPayload,
   return escapedPayloadSize;
 }
 
-size_t xsmUtils::unescape(const PayloadBuffer& escapedPayload,
+size_t Utils::unescape(const PayloadBuffer& escapedPayload,
                           const size_t escapedPayloadSize,
                           PayloadBuffer& unEscapedPayload) {
   int skippedBytes = 0;
@@ -61,7 +61,7 @@ size_t xsmUtils::unescape(const PayloadBuffer& escapedPayload,
   return unescapedPayloadSize;
 }
 
-int xsmUtils::unescapedDelimiterPos(const PayloadBuffer& buffer, const size_t bufferSize) {
+int Utils::unescapedDelimiterPos(const PayloadBuffer& buffer, const size_t bufferSize) {
   uint8_t prevByte = 0;
   // iterate through the buffer
   for (size_t i = 0; i < bufferSize; i++) {

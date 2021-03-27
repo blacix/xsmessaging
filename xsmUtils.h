@@ -5,7 +5,7 @@
 
 namespace xsm {
 
-class xsmUtils {
+class Utils {
 public:
   // Function to check for characters in the payload that are to be escaped.
   // These are the Frame Delimiter and the escape character itself.

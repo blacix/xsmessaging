@@ -5,7 +5,7 @@
 
 namespace xsm {
 
-class xsmCoder {
+class Coder {
 
 public:
   // Encodes the payload provided as input into encodedBuffer that is the output.

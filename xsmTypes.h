@@ -13,7 +13,7 @@ typedef std::array<uint8_t, MAX_PAYLOAD_SIZE> PayloadBuffer;
 // buffer for packet header
 typedef std::array<uint8_t, HEADER_SIZE> HeaderBuffer;
 // ringbuffer for incoming data
-typedef xsmRingBuffer<INPUT_BUFFER_SIZE> RingBuffer;
+typedef RingBufferT<INPUT_BUFFER_SIZE> RingBuffer;
 
 } // namespace xsm
 
