@@ -3,7 +3,10 @@
 #include <functional>
 #include <vector>
 #include "xsmDecoder.h"
+
+
 namespace xsm
+
 {
 class xsmApp
 {
@@ -12,7 +15,7 @@ public:
 
 	void onMessageReceived(std::vector<PacketBuffer> messages);
 };
-}
 
+}
 
 #endif

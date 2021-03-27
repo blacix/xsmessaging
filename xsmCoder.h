@@ -2,7 +2,9 @@
 #define XSM_CODER_H
 #include "xsmTypes.h"
 
+
 namespace xsm {
+
 class xsmCoder {
 
 public:
@@ -23,6 +25,7 @@ private:
   PayloadBuffer mEscapeHelperBuffer;
 
 };
+
 } // namespace xsm
 
 #endif // !XSM_CODER_H

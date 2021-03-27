@@ -3,7 +3,9 @@
 #include <string>
 #include <vector>
 
+
 namespace xsm {
+
 class xsmAppUtils {
 public:
   xsmAppUtils() = default;
@@ -16,5 +18,6 @@ public:
   // helper method to get epoch timestamp ms
   static long long getCurrentTimestamp();
 };
+
 } // namespace xsm
 #endif

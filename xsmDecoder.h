@@ -26,7 +26,6 @@ public:
 
 private:
 
-
   // preallocated helper buffer for escaping
   PayloadBuffer mEscapeHelperBuffer;
   // preallocated buffer for incoming payload

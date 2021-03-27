@@ -1,10 +1,10 @@
 #ifndef XSM_ENDPOINT
 #define XSM_ENDPOINT
 #include <functional>
+#include <vector>
 
 #include "xsmCoder.h"
 #include "xsmDecoder.h"
-#include "xsmRingBuffer.h"
 
 
 namespace xsm {
