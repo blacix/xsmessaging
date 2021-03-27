@@ -1,5 +1,5 @@
 #include "xsmCodec.h"
-#include "CRCMaximDallas1-Wire.h"
+#include "CRCMaximDallas.h"
 
 using namespace xsm;
 
