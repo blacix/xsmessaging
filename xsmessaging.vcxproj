@@ -146,6 +146,7 @@
     <ClCompile Include="xsmessaging.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CRCMaximDallas.h" />
     <ClInclude Include="xsmRingBuffer.h" />
     <ClInclude Include="xsmUtils.h" />
     <ClInclude Include="xsmApp.h" />

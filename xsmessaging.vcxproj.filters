@@ -47,5 +47,8 @@
     <ClInclude Include="xsmUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CRCMaximDallas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

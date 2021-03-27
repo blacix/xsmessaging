@@ -1,4 +1,5 @@
 #include "xsmCodec.h"
+#include "CRCMaximDallas1-Wire.h"
 
 using namespace xsm;
 
@@ -45,7 +46,7 @@ size_t xsmCodec::decode(const RingBuffer& encodedPackets, std::vector<PacketBuff
         // extract payload length
         uint8_t payloadLength = mHeader[PAYLOAD_LENGTH_INDEX];
         // check header crc
-        if (crc8(mHeader.data(), HEADER_SIZE - 1) == mHeader[2]) {
+        if (crc8MaximDallas(mHeader.data(), HEADER_SIZE - 1) == mHeader[2]) {
           // check if we have enough data based on the payload length
           uint16_t packetLength = HEADER_SIZE + payloadLength + FOOTER_SIZE;
           if (encodedPackets.capacity() >= i + packetLength) {
@@ -64,7 +65,7 @@ size_t xsmCodec::decode(const RingBuffer& encodedPackets, std::vector<PacketBuff
               // check payload crc
               uint8_t payloadCrc = 0;
               encodedPackets.get(i + HEADER_SIZE + payloadLength, payloadCrc);
-              if (crc8(mPotentialPayload.data(), payloadLength) == payloadCrc) {
+              if (crc8MaximDallas(mPotentialPayload.data(), payloadLength) == payloadCrc) {
                 // remove escape characters
                 unescape(mPotentialPayload, payloadLength, mEscapeHelperBuffer);
                 // add it to the output array of payloads
@@ -100,23 +101,6 @@ size_t xsmCodec::decode(const RingBuffer& encodedPackets, std::vector<PacketBuff
   }
 
   return bytesProcessed;
-}
-
-// CRC for Maxim/Dallas 1-Wire
-uint8_t xsmCodec::crc8(const uint8_t* buffer, const uint8_t size) {
-  uint8_t crc = 0;
-  uint8_t sum = 0;
-  for (size_t i = 0; i < size; i++) {
-    uint8_t byte = buffer[i];
-    for (uint8_t tmp = 8; tmp; tmp--) {
-      sum = (crc ^ byte) & 0x01;
-      crc >>= 1;
-      if (sum)
-        crc ^= 0x8C;
-      byte >>= 1;
-    }
-  }
-  return crc;
 }
 
 
@@ -162,7 +146,7 @@ size_t xsmCodec::assemble(const PayloadBuffer& escapedPayload, const size_t esca
   // add payload length
   encodedPacket[headerIndex++] = static_cast<uint8_t>(escapedPayloadSize);
   // add header crc
-  encodedPacket[headerIndex++] = crc8(encodedPacket.data(), 2);
+  encodedPacket[headerIndex++] = crc8MaximDallas(encodedPacket.data(), 2);
 
   // copy header and escaped payload to the packet buffer
   size_t payloadIndex = 0;
@@ -173,7 +157,7 @@ size_t xsmCodec::assemble(const PayloadBuffer& escapedPayload, const size_t esca
   // post incremented indexes become sizes
 
   // add footer: payload crc
-  encodedPacket[headerIndex + payloadIndex] = crc8(escapedPayload.data(), escapedPayloadSize);
+  encodedPacket[headerIndex + payloadIndex] = crc8MaximDallas(escapedPayload.data(), escapedPayloadSize);
 
 
 
