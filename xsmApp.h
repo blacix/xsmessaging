@@ -8,7 +8,7 @@ class xsmApp {
 public:
   xsmApp();
 
-  void onMessageReceived(xsm::PayloadBuffer payload);
+  void onMessageReceived(xsm::Payload payload);
 };
 
 

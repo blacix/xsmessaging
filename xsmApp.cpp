@@ -23,7 +23,7 @@ xsmApp::xsmApp() {
   }
 }
 
-void xsmApp::onMessageReceived(xsm::PayloadBuffer payload) {
+void xsmApp::onMessageReceived(xsm::Payload payload) {
   std::cout << "packet received" << std::endl;
-  xsm::AppUtils::print(payload.data(), 3);
+  xsm::AppUtils::print(payload.Data.data(), payload.DataSize);
 }

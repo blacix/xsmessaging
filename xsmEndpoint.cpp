@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace xsm;
 
-Endpoint::Endpoint(std::function<void(PayloadBuffer)> callback) : mCallback(callback) {}
+Endpoint::Endpoint(std::function<void(Payload)> callback) : mCallback(callback) {}
 
 void Endpoint::receive(const uint8_t byte) {
   mBufferIn.push(byte);
@@ -30,7 +30,7 @@ void Endpoint::process() {
     std::cout << "bytes processed: " << byteProcessed << std::endl;
     mBufferIn.pop(byteProcessed);
     if (!mReceivedPackets.empty()) {
-      for (PayloadBuffer packet : mReceivedPackets) {
+      for (Payload packet : mReceivedPackets) {
         mCallback(packet);
       }
       mReceivedPackets.clear();

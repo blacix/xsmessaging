@@ -6,7 +6,7 @@ using namespace xsm;
 
 // The ProtocolConfig::decode function uses a naive approach, that is,
 // it always starts interpreting the input buffer from the beginning.This has, of course, impact on the performance.
-size_t Decoder::decode(const RingBuffer& encodedPackets, std::vector<PayloadBuffer>& decodedPackets) {
+size_t Decoder::decode(const RingBuffer& encodedPackets, std::vector<Payload>& decodedPackets) {
   // number of bytes processed in the
   size_t bytesProcessed = 0;
   // due to escaping the previusly processed byte need to be tracked
@@ -39,11 +39,12 @@ size_t Decoder::decode(const RingBuffer& encodedPackets, std::vector<PayloadBuff
             // extract payload
 
             // copy payload to mPotentialPayload buffer
-            encodedPackets.get(i + HEADER_SIZE, mPotentialPayload.data(), payloadLength);
+            encodedPackets.get(i + HEADER_SIZE, mPotentialPayload.Data.data(), payloadLength);
+            mPotentialPayload.DataSize = payloadLength;
 
             // if there is unescaped delimiter in the payload that might be the start of a new packet
             // discard everything before it
-            int delimiterIndex = Utils::unescapedDelimiterPos(mPotentialPayload, payloadLength);
+            int delimiterIndex = Utils::unescapedDelimiterPos(mPotentialPayload.Data, payloadLength);
             if (delimiterIndex > 0) {
               // discard all before this index
               bytesProcessed = i + HEADER_SIZE + delimiterIndex;
@@ -51,13 +52,11 @@ size_t Decoder::decode(const RingBuffer& encodedPackets, std::vector<PayloadBuff
               // check payload crc
               uint8_t payloadCrc = 0;
               encodedPackets.get(i + HEADER_SIZE + payloadLength, payloadCrc);
-              if (crc8MaximDallas(mPotentialPayload.data(), payloadLength) == payloadCrc) {
+              if (crc8MaximDallas(mPotentialPayload.Data.data(), payloadLength) == payloadCrc) {
                 // remove escape characters
-                Utils::unescape(mPotentialPayload, payloadLength, mEscapeHelperBuffer);
+                Utils::unescape(mPotentialPayload, mUnescapedPayload);
                 // add it to the output array of payloads
-                //PacketBuffer packet;
-                //std::copy(mEscapeHelperBuffer.begin(), mEscapeHelperBuffer.end(), packet.begin());
-                decodedPackets.push_back(mPotentialPayload);
+                decodedPackets.push_back(mUnescapedPayload);
 
                 // move on to processing the next packet
                 i += packetLength;
