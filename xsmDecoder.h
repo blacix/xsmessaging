@@ -21,15 +21,15 @@ public:
   // into the decodedPackets array that is the output
   // returns the number of bytes processed in the encodedPayload input buffer
   // thus the caller can remove processed bytes
-  size_t decode(const RingBuffer& encodedPackets, std::vector<Payload>& decodedPackets);
+  size_t decode(const RingBuffer& encodedPackets, std::vector<Message>& decodedPackets);
 
 
 private:
 
   // preallocated helper buffer for unescaping
-  Payload mUnescapedPayload;
+  Message mUnescapedPayload;
   // preallocated buffer for incoming payload
-  Payload mPotentialPayload;
+  Message mPotentialPayload;
   // preallocated buffer for incoming header
   HeaderBuffer mHeader;
 

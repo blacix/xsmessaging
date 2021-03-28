@@ -3,10 +3,10 @@
 #include <iostream>
 using namespace xsm;
 
-Endpoint::Endpoint(std::function<void(Payload)> callback) : mCallback(callback) {}
+Endpoint::Endpoint(std::function<void(Message)> callback) : mCallback(callback) {}
 
-void Endpoint::send(const Payload& payload) {
-  Frame frame = mProtocolCoder.encode(payload);
+void Endpoint::send(const Message& message) {
+  Frame frame = mProtocolCoder.encode(message);
   receive(frame.getData().data(), frame.getSize());
 }
 
@@ -35,7 +35,7 @@ void Endpoint::process() {
     std::cout << "bytes processed: " << byteProcessed << std::endl;
     mBufferIn.pop(byteProcessed);
     if (!mReceivedPayloads.empty()) {
-      for (const Payload& payload : mReceivedPayloads) {
+      for (const Message& payload : mReceivedPayloads) {
         mCallback(payload);
       }
       mReceivedPayloads.clear();
