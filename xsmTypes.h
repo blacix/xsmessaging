@@ -20,10 +20,10 @@ struct Message {
   size_t Size = 0;
 };
 
-struct PacketRaw {
-  PacketBuffer Data;
-  size_t Size = 0;
-};
+//struct PacketRaw {
+//  PacketBuffer Data;
+//  size_t Size = 0;
+//};
 
 
 } // namespace xsm

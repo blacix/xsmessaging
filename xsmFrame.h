@@ -12,13 +12,14 @@ public:
 
   void setPayloadSize(const uint8_t length);
   void setHeaderCrc(const uint8_t crc);
-  void setEscapedPayload(const MessageBuffer& payload);
+  void setEscapedPayloadBuffer(const MessageBuffer& payload);
+  void setEscapedPayload(const Message& payload);
   void setPayloadCrc(const uint8_t crc);
 
   uint8_t getPayloadSize() const;
   uint8_t getHeaderCrc() const;
   MessageBuffer getPayloadBuffer() const;
-  Message getMessage() const;
+  Message getPayload() const;
   const PacketBuffer& getData() const;
   uint8_t getPayloadCrc() const;
   uint8_t getSize() const;
