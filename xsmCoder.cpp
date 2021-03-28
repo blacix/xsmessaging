@@ -17,7 +17,7 @@ Frame Coder::encode(const Payload& payload) {
   return frame;
 }
 
-void Coder::encode(const Payload& payload, Packet& packet) {
+void Coder::encode(const Payload& payload, PacketRaw& packet) {
   // perform escaping in member buffer. this might makes the payload bigger
   Utils::escape(payload, mEscapedPayload);
 
@@ -29,7 +29,7 @@ void Coder::encode(const Payload& payload, Packet& packet) {
 }
 
 
-void Coder::assemble(const Payload& escapedPayload, Packet& encodedPacket) {
+void Coder::assemble(const Payload& escapedPayload, PacketRaw& encodedPacket) {
   // assemble the header
   size_t headerIndex = 0;
   // add frame delimiter first

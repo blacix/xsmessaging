@@ -20,7 +20,7 @@ struct Payload {
   size_t DataSize = 0;
 };
 
-struct Packet {
+struct PacketRaw {
   PacketBuffer Data;
   size_t DataSize = 0;
 };
