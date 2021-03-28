@@ -38,8 +38,12 @@ void Endpoint::process() {
   }
 }
 
-const size_t Endpoint::createPacket(const std::vector<uint8_t>&& data, PacketBuffer& packet) {
-  PayloadBuffer payloadBuffer;
-  std::copy(data.begin(), data.end(), payloadBuffer.begin());
-  return mProtocolCoder.encode(payloadBuffer, data.size(), packet);
+Packet Endpoint::createPacket(const std::vector<uint8_t>&& data) {
+  Packet packet;
+  Payload payload;
+  payload.DataSize = data.size();
+  std::copy(data.begin(), data.end(), payload.Data.begin());
+
+  mProtocolCoder.encode(payload, packet);
+  return packet;
 }

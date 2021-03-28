@@ -11,12 +11,12 @@ xsmApp::xsmApp() {
 
   uint8_t data[256];
 
-  xsm::PacketBuffer packet;
-  size_t packetSize = ep.createPacket({'a', 'b', 'c'}, packet);
-  std::copy(packet.begin(), packet.end(), data);
+  xsm::Packet packet = ep.createPacket({'a', 'b', 'c'}); 
+  std::copy(packet.Data.begin(), packet.Data.end(), data);
 
-  packetSize = ep.createPacket({'d', 'e', 'f'}, packet);
-  std::copy(packet.begin(), packet.end(), data + packetSize);
+  packet = ep.createPacket({'d', 'e', 'f'});
+  std::copy(packet.Data.begin(), packet.Data.end(), data + packet.DataSize);
+  
 
   for (size_t i = 0; i < 14; ++i) {
     ep.receive(data[i]);

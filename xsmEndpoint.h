@@ -16,7 +16,7 @@ public:
   void receive(const uint8_t* bytes, size_t size);
   void receive(const std::vector<uint8_t>& bytes);
 
-  const size_t createPacket(const std::vector<uint8_t>&& data, PacketBuffer& packet);
+  Packet createPacket(const std::vector<uint8_t>&& data);
 
 private:
   void process();

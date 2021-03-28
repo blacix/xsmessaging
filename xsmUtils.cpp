@@ -2,28 +2,25 @@
 
 using namespace xsm;
 
-size_t Utils::escape(const PayloadBuffer& unescapedPayload,
-                     const size_t unescapedPayloadSize,
-                     PayloadBuffer& escapedPayload) {
+void Utils::escape(const Payload& unescapedPayload, Payload& escapedPayload) {
 
   size_t escapedPayloadSize = 0;
   // iterate through the input payload buffer and insert escaped payload in the
   // escapedPayload output buffer
-  for (size_t i = 0; i < unescapedPayloadSize && escapedPayloadSize < escapedPayload.size(); i++) {
-    uint8_t b = unescapedPayload[i];
+  for (size_t i = 0; i < unescapedPayload.DataSize && escapedPayloadSize < escapedPayload.Data.size(); i++) {
+    uint8_t b = unescapedPayload.Data[i];
     // the frame delimiter and the escape byte itself are to be escaped
     if (b == FRAME_DELIMITER || b == ESCAPE_BYTE) {
-      escapedPayload[escapedPayloadSize] = ESCAPE_BYTE;
+      escapedPayload.Data[escapedPayloadSize] = ESCAPE_BYTE;
       ++escapedPayloadSize;
     }
 
-    if (escapedPayloadSize < escapedPayload.size()) {
-      escapedPayload[escapedPayloadSize] = b;
+    if (escapedPayloadSize < escapedPayload.Data.size()) {
+      escapedPayload.Data[escapedPayloadSize] = b;
       ++escapedPayloadSize;
     }
   }
-
-  return escapedPayloadSize;
+  escapedPayload.DataSize = escapedPayloadSize;
 }
 
 size_t Utils::unescape(const PayloadBuffer& escapedPayload,

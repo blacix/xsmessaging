@@ -6,49 +6,39 @@
 using namespace xsm;
 
 
-size_t Coder::encode(const PayloadBuffer& unEscapedPayload,
-                        const size_t unEscapedPayloadSize,
-                        PacketBuffer& encodedData) {
+void Coder::encode(const Payload& payload, Packet& packet) {
   // perform escaping in member buffer. this might makes the payload bigger
-  size_t escapedPayloadBufferSize = Utils::escape(unEscapedPayload, unEscapedPayloadSize, mEscapeHelperBuffer);
+  Utils::escape(payload, mEscapedPayload);
 
   // now mEscapeHelperBuffer holds the escaped payload
   // assemble the packet and return its size.
-  if (escapedPayloadBufferSize > 0)
-    return assemble(mEscapeHelperBuffer, escapedPayloadBufferSize, encodedData);
-  else
-    return 0;
+  if (mEscapedPayload.DataSize > 0) {
+    assemble(mEscapedPayload, packet);
+  }
 }
 
-size_t Coder::assemble(const PayloadBuffer& escapedPayload,
-                          const size_t escapedPayloadSize,
-                          PacketBuffer& encodedPacket) {
-  // if the escaped data provided is too large, it won't fit in a max size packet
-  // this is checked outside as well, but this being a public static method
-  // it is better to make sure noone calls it with a wrong parameter
-  if (escapedPayloadSize > MAX_PAYLOAD_SIZE)
-    return 0;
-
+void Coder::assemble(const Payload& escapedPayload, Packet& encodedPacket) {
   // assemble the header
   size_t headerIndex = 0;
   // add frame delimiter first
-  encodedPacket[headerIndex++] = FRAME_DELIMITER;
+  encodedPacket.Data[headerIndex++] = FRAME_DELIMITER;
   // add payload length
-  encodedPacket[headerIndex++] = static_cast<uint8_t>(escapedPayloadSize);
+  encodedPacket.Data[headerIndex++] = static_cast<uint8_t>(escapedPayload.DataSize);
   // add header crc
-  encodedPacket[headerIndex++] = crc8MaximDallas(encodedPacket.data(), 2);
+  encodedPacket.Data[headerIndex++] = crc8MaximDallas(encodedPacket.Data.data(), 2);
 
   // copy header and escaped payload to the packet buffer
   size_t payloadIndex = 0;
-  for (; payloadIndex < escapedPayloadSize; payloadIndex++) {
-    encodedPacket[headerIndex + payloadIndex] = escapedPayload[payloadIndex];
+  for (; payloadIndex < escapedPayload.DataSize; payloadIndex++) {
+    encodedPacket.Data[headerIndex + payloadIndex] = escapedPayload.Data[payloadIndex];
   }
+
+  //std::copy(escapedPayload.Data.begin(), escapedPayload.Data.end(), encodedPacket.Data.data() + HEADER_SIZE);
 
   // post incremented indexes become sizes
 
   // add footer: payload crc
-  encodedPacket[headerIndex + payloadIndex] = crc8MaximDallas(escapedPayload.data(), escapedPayloadSize);
+  encodedPacket.Data[headerIndex + payloadIndex] = crc8MaximDallas(escapedPayload.Data.data(), escapedPayload.DataSize);
 
-  // return the size of the assembled packet
-  return headerIndex + payloadIndex + FOOTER_SIZE;
+  encodedPacket.DataSize = headerIndex + payloadIndex + FOOTER_SIZE;
 }

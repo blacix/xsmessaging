@@ -10,20 +10,17 @@ class Coder {
 public:
   // Encodes the payload provided as input into encodedBuffer that is the output.
   // First it escapes the necessary characters in the payload than assembles the packet
-  size_t encode(const PayloadBuffer& unEscapedPayload, const size_t unEscapedPayloadSize, PacketBuffer& encodedData);
+  void encode(const Payload& payload, Packet& packet);
 
 private:
   // Helper function that takes an escapedPayload as input and assembles the packet
   // that meets the requirements of the protocol into encodedPayload that is the output.
   // returns the size of the assembled packet or 0 on error.
-  static size_t assemble(const PayloadBuffer& escapedPayload,
-                         const size_t escapedPayloadSize,
-                         PacketBuffer& encodedPacket);
+  static void assemble(const Payload& escapedPayload, Packet& encodedPacket);
 
 
   // preallocated helper buffer for escaping
-  PayloadBuffer mEscapeHelperBuffer;
-
+  Payload mEscapedPayload;
 };
 
 } // namespace xsm

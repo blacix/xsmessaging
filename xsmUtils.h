@@ -9,9 +9,7 @@ class Utils {
 public:
   // Function to check for characters in the payload that are to be escaped.
   // These are the Frame Delimiter and the escape character itself.
-  static size_t escape(const PayloadBuffer& unescapedPayload,
-                       const size_t unescapedPayloadSize,
-                       PayloadBuffer& escapedPayload);
+  static void escape(const Payload& unescapedPayload, Payload& escapedPayload);
 
   // Helper function to remove escape characters from an escaped payload
   // returns the number of escae bytes removed from the buffer

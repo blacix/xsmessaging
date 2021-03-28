@@ -17,12 +17,12 @@ typedef RingBufferT<INPUT_BUFFER_SIZE> RingBuffer;
 
 struct Payload {
   PayloadBuffer Data;
-  size_t DataSize;
+  size_t DataSize = 0;
 };
 
 struct Packet {
   PacketBuffer Data;
-  size_t DataSize;
+  size_t DataSize = 0;
 };
 
 
