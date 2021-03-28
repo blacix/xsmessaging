@@ -20,6 +20,7 @@ public:
   PayloadBuffer getPayload() const;
   const PacketBuffer& getData() const;
   uint8_t getPayloadCrc() const;
+  uint8_t getSize() const;
 
 private:
   PacketBuffer mData;

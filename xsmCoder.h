@@ -8,7 +8,7 @@ namespace xsm {
 class Coder {
 
 public:
-  void encode(const Payload& payload, Frame& frame);
+  Frame encode(const Payload& payload);
 
   // Encodes the payload provided as input into encodedBuffer that is the output.
   // First it escapes the necessary characters in the payload than assembles the packet

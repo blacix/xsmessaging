@@ -1,5 +1,4 @@
 #include "xsmFrame.h"
-
 using namespace xsm;
 
 Frame::Frame() {
@@ -43,4 +42,8 @@ const PacketBuffer& Frame::getData() const {
 
 uint8_t Frame::getPayloadCrc() const {
   return mData[static_cast<size_t>(HEADER_SIZE) + static_cast<size_t>(getPayloadSize())];
+}
+
+uint8_t Frame::getSize() const {
+  return HEADER_SIZE + getPayloadSize() + FOOTER_SIZE;
 }

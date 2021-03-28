@@ -12,14 +12,11 @@ namespace xsm {
 class Endpoint {
 public:
   Endpoint(std::function<void(Payload)>);
+  void send(const Payload& payload);
+  
   void receive(const uint8_t byte);
   void receive(const uint8_t* bytes, size_t size);
   void receive(const std::vector<uint8_t>& bytes);
-
-  Packet createPacket(const std::vector<uint8_t>&& data);
-  Packet createPacket(const Payload& data);
-
-  Frame createFrame(const Payload& data);
 
 private:
   void process();

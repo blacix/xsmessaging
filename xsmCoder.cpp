@@ -5,7 +5,8 @@
 
 using namespace xsm;
 
-void Coder::encode(const Payload& payload, Frame& frame) {
+Frame Coder::encode(const Payload& payload) {
+  Frame frame;
   Utils::escape(payload, mEscapedPayload);
   if (mEscapedPayload.DataSize > 0) {
     frame.setEscapedPayload(mEscapedPayload.Data);
@@ -13,6 +14,7 @@ void Coder::encode(const Payload& payload, Frame& frame) {
     frame.setHeaderCrc(crc8(frame.getData().data(), HEADER_SIZE - 1));
     frame.setPayloadCrc(crc8(payload.Data.data(), payload.DataSize));
   }
+  return frame;
 }
 
 void Coder::encode(const Payload& payload, Packet& packet) {
@@ -35,7 +37,7 @@ void Coder::assemble(const Payload& escapedPayload, Packet& encodedPacket) {
   // add payload length
   encodedPacket.Data[headerIndex++] = static_cast<uint8_t>(escapedPayload.DataSize);
   // add header crc
-  encodedPacket.Data[headerIndex++] = crc8(encodedPacket.Data.data(), 2);
+  encodedPacket.Data[headerIndex++] = crc8(encodedPacket.Data.data(), HEADER_SIZE - 1);
 
   // copy header and escaped payload to the packet buffer
   std::copy(escapedPayload.Data.begin(),

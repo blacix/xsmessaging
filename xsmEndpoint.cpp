@@ -5,6 +5,11 @@ using namespace xsm;
 
 Endpoint::Endpoint(std::function<void(Payload)> callback) : mCallback(callback) {}
 
+void Endpoint::send(const Payload& payload) {
+  Frame frame = mProtocolCoder.encode(payload);
+  receive(frame.getData().data(), frame.getSize());
+}
+
 void Endpoint::receive(const uint8_t byte) {
   mBufferIn.push(byte);
   process();
@@ -30,30 +35,11 @@ void Endpoint::process() {
     std::cout << "bytes processed: " << byteProcessed << std::endl;
     mBufferIn.pop(byteProcessed);
     if (!mReceivedPayloads.empty()) {
-      for (Payload packet : mReceivedPayloads) {
-        mCallback(packet);
+      for (const Payload& payload : mReceivedPayloads) {
+        mCallback(payload);
       }
       mReceivedPayloads.clear();
     }
   }
 }
 
-Packet Endpoint::createPacket(const std::vector<uint8_t>&& data) {
-  Payload payload;
-  payload.DataSize = data.size();
-  std::copy(data.begin(), data.end(), payload.Data.begin());
-  return createPacket(payload);
-}
-
-Packet Endpoint::createPacket(const Payload& data) {
-  Packet packet;
-  mProtocolCoder.encode(data, packet);
-  return packet;
-}
-
-
-Frame Endpoint::createFrame(const Payload& payload) {
-  Frame frame;
-  mProtocolCoder.encode(payload, frame);
-  return frame;
-}
