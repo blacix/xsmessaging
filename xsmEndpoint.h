@@ -17,6 +17,7 @@ public:
   void receive(const std::vector<uint8_t>& bytes);
 
   Packet createPacket(const std::vector<uint8_t>&& data);
+  Packet createPacket(const Payload& data);
 
 private:
   void process();

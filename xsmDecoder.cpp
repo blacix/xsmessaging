@@ -1,5 +1,5 @@
 #include "xsmDecoder.h"
-#include "CRCMaximDallas.h"
+#include "xsmCRC.h"
 #include "xsmUtils.h"
 
 using namespace xsm;
@@ -32,7 +32,7 @@ size_t Decoder::decode(const RingBuffer& encodedPackets, std::vector<Payload>& d
         // extract payload size
         uint8_t payloadSize = mHeader[PAYLOAD_SIZE_INDEX];
         // check header crc
-        if (crc8MaximDallas(mHeader.data(), HEADER_SIZE - 1) == mHeader[2]) {
+        if (crc8(mHeader.data(), HEADER_SIZE - 1) == mHeader[2]) {
           // check if we have enough data based on the payload size
           uint16_t packetSize = HEADER_SIZE + payloadSize + FOOTER_SIZE;
           if (encodedPackets.capacity() >= i + packetSize) {
@@ -52,7 +52,7 @@ size_t Decoder::decode(const RingBuffer& encodedPackets, std::vector<Payload>& d
               // check payload crc
               uint8_t payloadCrc = 0;
               encodedPackets.get(i + HEADER_SIZE + payloadSize, payloadCrc);
-              if (crc8MaximDallas(mPotentialPayload.Data.data(), payloadSize) == payloadCrc) {
+              if (crc8(mPotentialPayload.Data.data(), payloadSize) == payloadCrc) {
                 // remove escape characters
                 Utils::unescape(mPotentialPayload, mUnescapedPayload);
                 // add it to the output array of payloads

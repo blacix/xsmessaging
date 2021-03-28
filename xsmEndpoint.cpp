@@ -39,11 +39,14 @@ void Endpoint::process() {
 }
 
 Packet Endpoint::createPacket(const std::vector<uint8_t>&& data) {
-  Packet packet;
   Payload payload;
   payload.DataSize = data.size();
   std::copy(data.begin(), data.end(), payload.Data.begin());
+  return createPacket(payload);
+}
 
-  mProtocolCoder.encode(payload, packet);
+Packet Endpoint::createPacket(const Payload& data) {
+  Packet packet;
+  mProtocolCoder.encode(data, packet);
   return packet;
 }

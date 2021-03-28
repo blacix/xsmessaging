@@ -1,7 +1,7 @@
-#include "CRCMaximDallas.h"
+#include "xsmCRC.h"
 
 // CRC for Maxim/Dallas 1-Wire
-uint8_t xsm::crc8MaximDallas(const uint8_t* buffer, const size_t size) {
+uint8_t xsm::crc8(const uint8_t* buffer, const size_t size) {
   uint8_t crc = 0;
   uint8_t sum = 0;
   for (size_t i = 0; i < size; i++) {
