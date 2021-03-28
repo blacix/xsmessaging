@@ -9,5 +9,4 @@ void xsmAppEndpoint::send(const xsm::Message& message) {
   for (size_t i = 0; i < frame.getSize(); ++i) {
     receive(frame.getData()[i]);
   }
-  //receive(frame.getData().data(), frame.getSize());
 }

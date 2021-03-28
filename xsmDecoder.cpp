@@ -10,6 +10,7 @@ Decoder::Decoder(std::function<void(Message)> callback) : mState(State::DELIMITE
 }
 
 void Decoder::receive(const uint8_t b) {
+  bool escaped = false;
   switch (mState) {
     case State::DELIMITER:
       if (b == FRAME_DELIMITER) {
@@ -37,10 +38,37 @@ void Decoder::receive(const uint8_t b) {
       break;
     case State::PAYLOAD:
       if (mPotentialPayload.Size < mHeader[PAYLOAD_SIZE_INDEX]) {
-        mPotentialPayload.Data[mPotentialPayload.Size] = b;
-        ++mPotentialPayload.Size;
-        if (mPotentialPayload.Size >= mHeader[PAYLOAD_SIZE_INDEX]) {
-          mState = State::PAYLOAD_CRC;
+        if (escaped) {
+          // escaped byte
+          escaped = false;
+
+          mPotentialPayload.Data[mPotentialPayload.Size] = b;
+          ++mPotentialPayload.Size;
+
+          if (mPotentialPayload.Size >= mHeader[PAYLOAD_SIZE_INDEX]) {
+            mState = State::PAYLOAD_CRC;
+          }
+
+        } else {
+          // not escaped
+
+          if (b == FRAME_DELIMITER) {
+            // not escaped frame delimiter -> start of a new frame
+            // discard the current one
+            mState = State::DELIMITER;
+            mPotentialPayload.Size = 0;
+          } else {
+            if (b == ESCAPE_BYTE) {
+              escaped = true;
+            }
+
+            mPotentialPayload.Data[mPotentialPayload.Size] = b;
+            ++mPotentialPayload.Size;
+
+            if (mPotentialPayload.Size >= mHeader[PAYLOAD_SIZE_INDEX]) {
+              mState = State::PAYLOAD_CRC;
+            }
+          }
         }
       } else {
         mState = State::DELIMITER;
