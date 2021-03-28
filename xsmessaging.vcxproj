@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="xsmAppEndpoint.cpp" />
     <ClCompile Include="xsmCRC.cpp" />
     <ClCompile Include="xsmAppUtils.cpp" />
     <ClCompile Include="xsmApp.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="xsmUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="xsmAppEndpoint.h" />
     <ClInclude Include="xsmCRC.h" />
     <ClInclude Include="xsmCoder.h" />
     <ClInclude Include="xsmDefines.h" />

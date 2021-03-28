@@ -11,12 +11,16 @@ namespace xsm {
 
 class Endpoint {
 public:
-  Endpoint(std::function<void(Message)>);
-  void send(const Message& message);
-  
+  Endpoint(std::function<void(Message)> callback);
+  virtual ~Endpoint() = default;
+  virtual void send(const Message& message) = 0;
+
   void receive(const uint8_t byte);
   void receive(const uint8_t* bytes, size_t size);
   void receive(const std::vector<uint8_t>& bytes);
+
+protected:
+  Coder mProtocolCoder;
 
 private:
   void process();
@@ -24,7 +28,7 @@ private:
   std::function<void(Message)> mCallback;
   RingBuffer mBufferIn;
   Decoder mProtocolDecoder;
-  Coder mProtocolCoder;
+
   std::vector<Message> mReceivedMessages;
 };
 

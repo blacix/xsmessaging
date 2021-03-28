@@ -2,12 +2,12 @@
 
 #include <iostream>
 
-#include "xsmEndpoint.h"
+#include "xsmAppEndpoint.h"
 #include "xsmAppUtils.h"
 
 
 xsmApp::xsmApp() {
-  xsm::Endpoint ep(std::bind(&xsmApp::onMessageReceived, this, std::placeholders::_1));
+  xsmAppEndpoint ep(std::bind(&xsmApp::onMessageReceived, this, std::placeholders::_1));
 
   xsm::Message msg1{{'a', 'b', 'c'}, 3};
   xsm::Message msg2{{'c', 'd', 'e'}, 3};

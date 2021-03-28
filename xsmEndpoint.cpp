@@ -5,11 +5,6 @@ using namespace xsm;
 
 Endpoint::Endpoint(std::function<void(Message)> callback) : mCallback(callback) {}
 
-void Endpoint::send(const Message& message) {
-  Frame frame = mProtocolCoder.encode(message);
-  receive(frame.getData().data(), frame.getSize());
-}
-
 void Endpoint::receive(const uint8_t byte) {
   mBufferIn.push(byte);
   process();
