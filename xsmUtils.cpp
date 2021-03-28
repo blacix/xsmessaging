@@ -3,27 +3,24 @@
 using namespace xsm;
 
 size_t Utils::escape(const PayloadBuffer& unescapedPayload,
-                        const size_t unescapedPayloadSize,
-                        PayloadBuffer& escapedPayload) {
+                     const size_t unescapedPayloadSize,
+                     PayloadBuffer& escapedPayload) {
 
   size_t escapedPayloadSize = 0;
   // iterate through the input payload buffer and insert escaped payload in the
   // escapedPayload output buffer
-  for (size_t i = 0; i < unescapedPayloadSize; i++) {
+  for (size_t i = 0; i < unescapedPayloadSize && escapedPayloadSize < escapedPayload.size(); i++) {
     uint8_t b = unescapedPayload[i];
-    // don't escape the frame delimiter at first position
-    if (i != 0) {
-      // the frame delimiter and the escape byte itself are to be escaped
-      if (b == FRAME_DELIMITER || b == ESCAPE_BYTE) {
-        escapedPayload[i] = ESCAPE_BYTE;
-        ++escapedPayloadSize;
-        if (escapedPayloadSize > unescapedPayloadSize) {
-          return 0;
-        }
-      }
+    // the frame delimiter and the escape byte itself are to be escaped
+    if (b == FRAME_DELIMITER || b == ESCAPE_BYTE) {
+      escapedPayload[escapedPayloadSize] = ESCAPE_BYTE;
+      ++escapedPayloadSize;
     }
-    escapedPayload[escapedPayloadSize] = b;
-    ++escapedPayloadSize;
+
+    if (escapedPayloadSize < escapedPayload.size()) {
+      escapedPayload[escapedPayloadSize] = b;
+      ++escapedPayloadSize;
+    }
   }
 
   return escapedPayloadSize;
@@ -67,7 +64,7 @@ int Utils::unescapedDelimiterPos(const PayloadBuffer& buffer, const size_t buffe
   for (size_t i = 0; i < bufferSize; i++) {
     if (buffer[i] == FRAME_DELIMITER && prevByte != ESCAPE_BYTE) {
       // index found, return it
-      return i;
+      return static_cast<int>(i);
     }
     prevByte = buffer[i];
   }
