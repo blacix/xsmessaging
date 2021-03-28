@@ -21,7 +21,7 @@ public:
   // into the decodedPackets array that is the output
   // returns the number of bytes processed in the encodedPayload input buffer
   // thus the caller can remove processed bytes
-  size_t decode(const RingBuffer& encodedPackets, std::vector<Message>& decodedPackets);
+  size_t decode(const RingBuffer& encodedFrames, std::vector<Message>& decodedMessages);
 
 
 private:

@@ -16,8 +16,8 @@ static constexpr uint8_t HEADER_SIZE = 3;
 static constexpr uint8_t FOOTER_SIZE = 1;
 static constexpr uint8_t MIN_PAYLOAD_SIZE = 1;
 static constexpr uint8_t MAX_PAYLOAD_SIZE = 128;
-static constexpr uint16_t MAX_PACKET_SIZE = HEADER_SIZE + MAX_PAYLOAD_SIZE + FOOTER_SIZE;
-static constexpr uint16_t MIN_PACKET_SIZE = HEADER_SIZE + MIN_PAYLOAD_SIZE + FOOTER_SIZE;
+static constexpr uint16_t MAX_FRAME_SIZE = HEADER_SIZE + MAX_PAYLOAD_SIZE + FOOTER_SIZE;
+static constexpr uint16_t MIN_FRAME_SIZE = HEADER_SIZE + MIN_PAYLOAD_SIZE + FOOTER_SIZE;
 static constexpr size_t INPUT_BUFFER_SIZE = 2048;
 
 } // namespace xsm
