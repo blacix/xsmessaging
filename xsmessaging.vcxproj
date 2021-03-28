@@ -146,12 +146,14 @@
     <ClCompile Include="xsmCoder.cpp" />
     <ClCompile Include="xsmEndpoint.cpp" />
     <ClCompile Include="xsmessaging.cpp" />
+    <ClCompile Include="xsmFrame.cpp" />
     <ClCompile Include="xsmUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xsmCRC.h" />
     <ClInclude Include="xsmCoder.h" />
     <ClInclude Include="xsmDefines.h" />
+    <ClInclude Include="xsmFrame.h" />
     <ClInclude Include="xsmTypes.h" />
     <ClInclude Include="xsmRingBuffer.h" />
     <ClInclude Include="xsmAppUtils.h" />

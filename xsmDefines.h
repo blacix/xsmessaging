@@ -11,6 +11,7 @@ static const uint8_t FRAME_DELIMITER = 0b10101011;
 static const uint8_t ESCAPE_BYTE = 0b00101111;
 // payload length position in header
 static constexpr uint8_t PAYLOAD_SIZE_INDEX = 1;
+static constexpr uint8_t HEADER_CRC_INDEX = 2;
 static constexpr uint8_t HEADER_SIZE = 3;
 static constexpr uint8_t FOOTER_SIZE = 1;
 static constexpr uint8_t MIN_PAYLOAD_SIZE = 1;
