@@ -28,17 +28,13 @@ void Coder::assemble(const Payload& escapedPayload, Packet& encodedPacket) {
   encodedPacket.Data[headerIndex++] = crc8MaximDallas(encodedPacket.Data.data(), 2);
 
   // copy header and escaped payload to the packet buffer
-  size_t payloadIndex = 0;
-  for (; payloadIndex < escapedPayload.DataSize; payloadIndex++) {
-    encodedPacket.Data[headerIndex + payloadIndex] = escapedPayload.Data[payloadIndex];
-  }
-
-  //std::copy(escapedPayload.Data.begin(), escapedPayload.Data.end(), encodedPacket.Data.data() + HEADER_SIZE);
-
-  // post incremented indexes become sizes
+  std::copy(escapedPayload.Data.begin(),
+            escapedPayload.Data.begin() + escapedPayload.DataSize,
+            encodedPacket.Data.data() + HEADER_SIZE);
 
   // add footer: payload crc
-  encodedPacket.Data[headerIndex + payloadIndex] = crc8MaximDallas(escapedPayload.Data.data(), escapedPayload.DataSize);
+  encodedPacket.Data[HEADER_SIZE + escapedPayload.DataSize]
+      = crc8MaximDallas(escapedPayload.Data.data(), escapedPayload.DataSize);
 
-  encodedPacket.DataSize = headerIndex + payloadIndex + FOOTER_SIZE;
+  encodedPacket.DataSize = HEADER_SIZE + escapedPayload.DataSize + FOOTER_SIZE;
 }
