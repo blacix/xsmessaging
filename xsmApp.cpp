@@ -9,11 +9,13 @@
 xsmApp::xsmApp() {
   xsm::Endpoint ep(std::bind(&xsmApp::onMessageReceived, this, std::placeholders::_1));
 
-  xsm::Message msg{{'a', 'b', 'c'}, 3};
-  ep.send(msg);
+  xsm::Message msg1{{'a', 'b', 'c'}, 3};
+  xsm::Message msg2{{'c', 'd', 'e'}, 3};
+  ep.send(msg1);
+  ep.send(msg2);
 }
 
-void xsmApp::onMessageReceived(xsm::Message payload) {
-  std::cout << "packet received" << std::endl;
-  xsm::AppUtils::print(payload.Data.data(), payload.Size);
+void xsmApp::onMessageReceived(xsm::Message message) {
+  std::cout << "message received" << std::endl;
+  xsm::AppUtils::print(message.Data.data(), message.Size);
 }
