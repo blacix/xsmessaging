@@ -23,17 +23,17 @@ void Endpoint::receive(const std::vector<uint8_t>& bytes) {
 }
 
 void Endpoint::process() {
-  size_t byteProcessed = mProtocolCodec.decode(mBufferIn, mReceivedPackets);
+  size_t byteProcessed = mProtocolDecoder.decode(mBufferIn, mReceivedPayloads);
 
   // remove the bytes from the buffer that are already processed
   if (byteProcessed > 0) {
     std::cout << "bytes processed: " << byteProcessed << std::endl;
     mBufferIn.pop(byteProcessed);
-    if (!mReceivedPackets.empty()) {
-      for (Payload packet : mReceivedPackets) {
+    if (!mReceivedPayloads.empty()) {
+      for (Payload packet : mReceivedPayloads) {
         mCallback(packet);
       }
-      mReceivedPackets.clear();
+      mReceivedPayloads.clear();
     }
   }
 }
