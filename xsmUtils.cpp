@@ -27,8 +27,8 @@ size_t Utils::escape(const PayloadBuffer& unescapedPayload,
 }
 
 size_t Utils::unescape(const PayloadBuffer& escapedPayload,
-                          const size_t escapedPayloadSize,
-                          PayloadBuffer& unEscapedPayload) {
+                       const size_t escapedPayloadSize,
+                       PayloadBuffer& unEscapedPayload) {
   int skippedBytes = 0;
   // helper variable to remove the first escape character only.
   // this is the case when the escape charcter is escaped in the payload

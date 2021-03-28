@@ -49,15 +49,6 @@ size_t Coder::assemble(const PayloadBuffer& escapedPayload,
   // add footer: payload crc
   encodedPacket[headerIndex + payloadIndex] = crc8MaximDallas(escapedPayload.data(), escapedPayloadSize);
 
-
-  // std::stringstream ss;
-  // ss << std::hex;
-  // for (int i = 0; i < headerIndex + payloadIndex + FOOTER_SIZE; i++)
-  //{
-  //	ss << "0x" << (int)encodedData[i] << " ";
-  //}
-  // std::cout << ss.str() << std::endl;;
-
   // return the size of the assembled packet
   return headerIndex + payloadIndex + FOOTER_SIZE;
 }

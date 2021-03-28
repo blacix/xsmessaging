@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "xsmEndpoint.h"
+#include "xsmAppUtils.h"
 
 
 xsmApp::xsmApp() {
@@ -24,4 +25,5 @@ xsmApp::xsmApp() {
 
 void xsmApp::onMessageReceived(xsm::PayloadBuffer payload) {
   std::cout << "packet received" << std::endl;
+  xsm::AppUtils::print(payload.data(), 3);
 }

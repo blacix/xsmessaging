@@ -6,10 +6,10 @@
 
 namespace xsm {
 
-class xsmAppUtils {
+class AppUtils {
 public:
-  xsmAppUtils() = default;
-  ~xsmAppUtils() = default;
+  AppUtils() = default;
+  ~AppUtils() = default;
 
   // helper method to convert hex string to byte
   static uint8_t hexStringToByte(const std::string& hexString);
@@ -17,6 +17,7 @@ public:
   static std::vector<uint8_t> hexStringToByteArray(const std::string& hexString);
   // helper method to get epoch timestamp ms
   static long long getCurrentTimestamp();
+  static void print(const uint8_t* packet, size_t packetSize);
 };
 
 } // namespace xsm

@@ -1,13 +1,15 @@
 ﻿#include "xsmAppUtils.h"
-
 #include <chrono>
 #include <cinttypes>
 #include <iterator>
 #include <sstream>
+#include <iostream>
+
+#include "xsmTypes.h"
 
 using namespace xsm;
 
-uint8_t xsmAppUtils::hexStringToByte(const std::string& hexString) {
+uint8_t AppUtils::hexStringToByte(const std::string& hexString) {
   // the return value
   // uint8_t returnValue = 0;
   // less safe but in many implementations legacy C string functions
@@ -28,7 +30,7 @@ uint8_t xsmAppUtils::hexStringToByte(const std::string& hexString) {
   return static_cast<uint8_t>(value);
 }
 
-std::vector<uint8_t> xsmAppUtils::hexStringToByteArray(const std::string& hexString) {
+std::vector<uint8_t> AppUtils::hexStringToByteArray(const std::string& hexString) {
   std::vector<uint8_t> retVal;
   std::stringstream ss(hexString);
   ss << std::hex;
@@ -59,8 +61,19 @@ std::vector<uint8_t> xsmAppUtils::hexStringToByteArray(const std::string& hexStr
 }
 
 
-long long xsmAppUtils::getCurrentTimestamp() {
+long long AppUtils::getCurrentTimestamp() {
   std::chrono::milliseconds ms
       = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
   return ms.count();
 }
+
+void AppUtils::print(const uint8_t* packet, size_t packetSize) { 
+   std::stringstream ss;
+   ss << std::hex;
+   for (size_t i = 0; i < packetSize; i++)
+  {
+     ss << "0x" << (int)packet[i] << " ";
+  }
+   std::cout << ss.str() << std::endl;
+}
+

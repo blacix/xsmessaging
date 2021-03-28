@@ -15,6 +15,17 @@ typedef std::array<uint8_t, HEADER_SIZE> HeaderBuffer;
 // ringbuffer for incoming data
 typedef RingBufferT<INPUT_BUFFER_SIZE> RingBuffer;
 
+struct Payload {
+  PayloadBuffer Data;
+  size_t DataSize;
+};
+
+struct Packet {
+  PacketBuffer Data;
+  size_t DataSize;
+};
+
+
 } // namespace xsm
 
 #endif
