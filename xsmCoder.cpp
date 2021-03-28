@@ -33,8 +33,7 @@ void Coder::assemble(const Payload& escapedPayload, Packet& encodedPacket) {
             encodedPacket.Data.data() + HEADER_SIZE);
 
   // add footer: payload crc
-  encodedPacket.Data[HEADER_SIZE + escapedPayload.DataSize]
-      = crc8(escapedPayload.Data.data(), escapedPayload.DataSize);
+  encodedPacket.Data[HEADER_SIZE + escapedPayload.DataSize] = crc8(escapedPayload.Data.data(), escapedPayload.DataSize);
 
   encodedPacket.DataSize = HEADER_SIZE + escapedPayload.DataSize + FOOTER_SIZE;
 }
