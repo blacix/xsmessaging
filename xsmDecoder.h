@@ -46,6 +46,8 @@ private:
   // preallocated buffer for incoming header
   HeaderBuffer mHeader;
 
+  uint8_t mPrevByte = FRAME_DELIMITER;
+
   unsigned long long mDiscardedBytes = 0;
 
   

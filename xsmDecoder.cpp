@@ -9,40 +9,46 @@ Decoder::Decoder(std::function<void(Message)> callback) : mState(State::DELIMITE
   mPotentialPayload.Size = 0;
 }
 
-void Decoder::receive(const uint8_t b) {
+void Decoder::receive(const uint8_t byte) {
   bool escaped = false;
   switch (mState) {
     case State::DELIMITER:
-      if (b == FRAME_DELIMITER) {
-        mHeader[0] = b;
+      if (byte == FRAME_DELIMITER) {
+        mHeader[0] = byte;
         mState = State::SIZE;
       }
       break;
+
     case State::SIZE:
-      if (b <= MAX_PAYLOAD_SIZE) {
-        mHeader[PAYLOAD_SIZE_INDEX] = b;
+      if (byte <= MAX_PAYLOAD_SIZE) {
+        mHeader[PAYLOAD_SIZE_INDEX] = byte;
         mState = State::CRC;
       } else {
+        // reset
         mState = State::DELIMITER;
         mPotentialPayload.Size = 0;
+        mPrevByte = FRAME_DELIMITER;
       }
       break;
+
     case State::CRC:
-      if (crc8(mHeader.data(), HEADER_SIZE - 1) == b) {
-        mHeader[HEADER_CRC_INDEX] = b;
+      if (crc8(mHeader.data(), HEADER_SIZE - 1) == byte) {
+        mHeader[HEADER_CRC_INDEX] = byte;
         mState = State::PAYLOAD;
       } else {
         mState = State::DELIMITER;
         mPotentialPayload.Size = 0;
+        mPrevByte = FRAME_DELIMITER;
       }
       break;
+
     case State::PAYLOAD:
       if (mPotentialPayload.Size < mHeader[PAYLOAD_SIZE_INDEX]) {
         if (escaped) {
           // escaped byte
           escaped = false;
 
-          mPotentialPayload.Data[mPotentialPayload.Size] = b;
+          mPotentialPayload.Data[mPotentialPayload.Size] = byte;
           ++mPotentialPayload.Size;
 
           if (mPotentialPayload.Size >= mHeader[PAYLOAD_SIZE_INDEX]) {
@@ -52,17 +58,23 @@ void Decoder::receive(const uint8_t b) {
         } else {
           // not escaped
 
-          if (b == FRAME_DELIMITER) {
+          if (byte == FRAME_DELIMITER) {
             // not escaped frame delimiter -> start of a new frame
             // discard the current one
             mState = State::DELIMITER;
             mPotentialPayload.Size = 0;
+            mPrevByte = FRAME_DELIMITER;
+
+            // handleDelimiter(uint8_t byte);
+            mHeader[0] = byte;
+            mState = State::SIZE;
+
           } else {
-            if (b == ESCAPE_BYTE) {
+            if (byte == ESCAPE_BYTE) {
               escaped = true;
             }
 
-            mPotentialPayload.Data[mPotentialPayload.Size] = b;
+            mPotentialPayload.Data[mPotentialPayload.Size] = byte;
             ++mPotentialPayload.Size;
 
             if (mPotentialPayload.Size >= mHeader[PAYLOAD_SIZE_INDEX]) {
@@ -73,16 +85,63 @@ void Decoder::receive(const uint8_t b) {
       } else {
         mState = State::DELIMITER;
         mPotentialPayload.Size = 0;
+        mPrevByte = FRAME_DELIMITER;
       }
+
+
+      // if (!escaped && byte == FRAME_DELIMITER) {
+      //  mState = State::DELIMITER;
+      //  mPotentialPayload.Size = 0;
+      //  mPrevByte = FRAME_DELIMITER;
+
+      //  mHeader[0] = byte;
+      //  mState = State::SIZE;
+
+      //} else {
+      //  if (mPotentialPayload.Size < mHeader[PAYLOAD_SIZE_INDEX]) {
+      //    if (escaped) {
+      //      // escaped byte
+      //      escaped = false;
+
+      //      mPotentialPayload.Data[mPotentialPayload.Size] = byte;
+      //      ++mPotentialPayload.Size;
+
+      //      if (mPotentialPayload.Size >= mHeader[PAYLOAD_SIZE_INDEX]) {
+      //        mState = State::PAYLOAD_CRC;
+      //      }
+
+      //    } else {
+      //      // not escaped
+      //      if (byte == ESCAPE_BYTE) {
+      //        escaped = true;
+      //      }
+
+      //      mPotentialPayload.Data[mPotentialPayload.Size] = byte;
+      //      ++mPotentialPayload.Size;
+
+      //      if (mPotentialPayload.Size >= mHeader[PAYLOAD_SIZE_INDEX]) {
+      //        mState = State::PAYLOAD_CRC;
+      //      }
+      //    }
+      //  } else {
+      //    mState = State::DELIMITER;
+      //    mPotentialPayload.Size = 0;
+      //    mPrevByte = FRAME_DELIMITER;
+      //  }
+      //}
       break;
+
     case State::PAYLOAD_CRC: {
       uint8_t calulatedCrc = crc8(mPotentialPayload.Data.data(), mHeader[PAYLOAD_SIZE_INDEX]);
-      if (calulatedCrc == b) {
+      if (calulatedCrc == byte) {
         mCallback(mPotentialPayload);
       }
       mState = State::DELIMITER;
       mPotentialPayload.Size = 0;
-    } break;
+      mPrevByte = FRAME_DELIMITER;
+      break;
+    }
+
     default:
       break;
   }
