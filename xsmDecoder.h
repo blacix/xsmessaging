@@ -4,6 +4,7 @@
 #include <array>
 #include <cstdint>
 #include <vector>
+#include <functional>
 
 #include "xsmTypes.h"
 #include "xsmRingBuffer.h"
@@ -13,9 +14,19 @@ namespace xsm {
 class Decoder {
 
 public:
-  Decoder() = default;
+
+  enum class State {
+    DELIMITER,
+    SIZE,
+    CRC,
+    PAYLOAD,
+    PAYLOAD_CRC
+  };
+
+  Decoder(std::function<void(Message)> callback);
   ~Decoder() = default;
 
+  void receive(const uint8_t b);
 
   // Decodes every packet from the encodedData buffer provided as input
   // into the decodedPackets array that is the output
@@ -26,6 +37,8 @@ public:
 
 private:
 
+  State mState;
+  std::function<void(Message)> mCallback;
   // preallocated helper buffer for unescaping
   Message mUnescapedPayload;
   // preallocated buffer for incoming payload
@@ -34,6 +47,8 @@ private:
   HeaderBuffer mHeader;
 
   unsigned long long mDiscardedBytes = 0;
+
+  
 };
 
 

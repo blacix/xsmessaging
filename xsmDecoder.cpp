@@ -1,8 +1,64 @@
 #include "xsmDecoder.h"
+
 #include "xsmCRC.h"
 #include "xsmUtils.h"
 
 using namespace xsm;
+
+Decoder::Decoder(std::function<void(Message)> callback) : mState(State::DELIMITER), mCallback(callback) {
+  mPotentialPayload.Size = 0;
+}
+
+void Decoder::receive(const uint8_t b) {
+  switch (mState) {
+    case State::DELIMITER:
+      if (b == FRAME_DELIMITER) {
+        mHeader[0] = b;
+        mState = State::SIZE;
+      }
+      break;
+    case State::SIZE:
+      if (b <= MAX_PAYLOAD_SIZE) {
+        mHeader[PAYLOAD_SIZE_INDEX] = b;
+        mState = State::CRC;
+      } else {
+        mState = State::DELIMITER;
+        mPotentialPayload.Size = 0;
+      }
+      break;
+    case State::CRC:
+      if (crc8(mHeader.data(), HEADER_SIZE - 1) == b) {
+        mHeader[HEADER_CRC_INDEX] = b;
+        mState = State::PAYLOAD;
+      } else {
+        mState = State::DELIMITER;
+        mPotentialPayload.Size = 0;
+      }
+      break;
+    case State::PAYLOAD:
+      if (mPotentialPayload.Size < mHeader[PAYLOAD_SIZE_INDEX]) {
+        mPotentialPayload.Data[mPotentialPayload.Size] = b;
+        ++mPotentialPayload.Size;
+        if (mPotentialPayload.Size >= mHeader[PAYLOAD_SIZE_INDEX]) {
+          mState = State::PAYLOAD_CRC;
+        }
+      } else {
+        mState = State::DELIMITER;
+        mPotentialPayload.Size = 0;
+      }
+      break;
+    case State::PAYLOAD_CRC: {
+      uint8_t calulatedCrc = crc8(mPotentialPayload.Data.data(), mHeader[PAYLOAD_SIZE_INDEX]);
+      if (calulatedCrc == b) {
+        mCallback(mPotentialPayload);
+      }
+      mState = State::DELIMITER;
+      mPotentialPayload.Size = 0;
+    } break;
+    default:
+      break;
+  }
+}
 
 // The ProtocolConfig::decode function uses a naive approach, that is,
 // it always starts interpreting the input buffer from the beginning.This has, of course, impact on the performance.
@@ -87,5 +143,3 @@ size_t Decoder::decode(const RingBuffer& encodedFrames, std::vector<Message>& de
 
   return bytesProcessed;
 }
-
-

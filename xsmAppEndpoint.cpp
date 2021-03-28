@@ -6,5 +6,8 @@ xsmAppEndpoint::xsmAppEndpoint(std::function<void(xsm::Message)> callback) : xsm
 
 void xsmAppEndpoint::send(const xsm::Message& message) {
   xsm::Frame frame = mProtocolCoder.encode(message);
-  receive(frame.getData().data(), frame.getSize());
+  for (size_t i = 0; i < frame.getSize(); ++i) {
+    receive(frame.getData()[i]);
+  }
+  //receive(frame.getData().data(), frame.getSize());
 }

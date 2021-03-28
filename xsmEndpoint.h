@@ -16,20 +16,22 @@ public:
   virtual void send(const Message& message) = 0;
 
   void receive(const uint8_t byte);
-  void receive(const uint8_t* bytes, size_t size);
-  void receive(const std::vector<uint8_t>& bytes);
+  //void receive(const uint8_t* bytes, size_t size);
+  //void receive(const std::vector<uint8_t>& bytes);
 
 protected:
   Coder mProtocolCoder;
 
 private:
-  void process();
+  //void process();
 
-  std::function<void(Message)> mCallback;
   RingBuffer mBufferIn;
   Decoder mProtocolDecoder;
 
   std::vector<Message> mReceivedMessages;
+
+  std::function<void(Message)> mCallback;
+  
 };
 
 } // namespace xsm
