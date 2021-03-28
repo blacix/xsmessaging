@@ -50,3 +50,10 @@ Packet Endpoint::createPacket(const Payload& data) {
   mProtocolCoder.encode(data, packet);
   return packet;
 }
+
+
+Frame Endpoint::createFrame(const Payload& payload) {
+  Frame frame;
+  mProtocolCoder.encode(payload, frame);
+  return frame;
+}

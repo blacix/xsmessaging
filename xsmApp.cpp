@@ -11,6 +11,9 @@ xsmApp::xsmApp() {
 
   uint8_t data[256];
 
+  xsm::Payload p{{'a', 'b', 'c'}, 3};
+  xsm::Frame frame = ep.createFrame(p);
+
   xsm::Packet packet = ep.createPacket({'a', 'b', 'c'}); 
   std::copy(packet.Data.begin(), packet.Data.end(), data);
 

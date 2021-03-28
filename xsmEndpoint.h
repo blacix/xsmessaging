@@ -5,7 +5,7 @@
 
 #include "xsmCoder.h"
 #include "xsmDecoder.h"
-
+#include "xsmFrame.h"
 
 namespace xsm {
 
@@ -18,6 +18,8 @@ public:
 
   Packet createPacket(const std::vector<uint8_t>&& data);
   Packet createPacket(const Payload& data);
+
+  Frame createFrame(const Payload& data);
 
 private:
   void process();

@@ -1,16 +1,19 @@
 #ifndef XSM_CODER_H
 #define XSM_CODER_H
+#include "xsmFrame.h"
 #include "xsmTypes.h"
-
 
 namespace xsm {
 
 class Coder {
 
 public:
+  void encode(const Payload& payload, Frame& frame);
+
   // Encodes the payload provided as input into encodedBuffer that is the output.
   // First it escapes the necessary characters in the payload than assembles the packet
   void encode(const Payload& payload, Packet& packet);
+
 
 private:
   // Helper function that takes an escapedPayload as input and assembles the packet

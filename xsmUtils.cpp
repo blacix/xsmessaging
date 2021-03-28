@@ -23,6 +23,7 @@ void Utils::escape(const Payload& unescapedPayload, Payload& escapedPayload) {
   escapedPayload.DataSize = escapedPayloadSize;
 }
 
+
 void Utils::unescape(const Payload& escapedPayload, Payload& unEscapedPayload) {
   int skippedBytes = 0;
   // helper variable to remove the first escape character only.

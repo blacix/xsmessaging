@@ -12,7 +12,7 @@ public:
 
   void setPayloadSize(const uint8_t length);
   void setHeaderCrc(const uint8_t crc);
-  void setPayload(const PayloadBuffer& payload);
+  void setEscapedPayload(const PayloadBuffer& payload);
   void setPayloadCrc(const uint8_t crc);
 
   uint8_t getPayloadSize() const;

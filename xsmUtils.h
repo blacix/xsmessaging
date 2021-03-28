@@ -2,6 +2,7 @@
 #define XSM_UTILS_H
 
 #include "xsmTypes.h"
+#include "xsmFrame.h"
 
 namespace xsm {
 

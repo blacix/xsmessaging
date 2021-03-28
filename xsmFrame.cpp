@@ -3,6 +3,7 @@
 using namespace xsm;
 
 Frame::Frame() {
+  mData[0] = FRAME_DELIMITER;
   setPayloadSize(0);
 }
 
@@ -14,7 +15,7 @@ void Frame::setHeaderCrc(const uint8_t crc) {
   mData[HEADER_CRC_INDEX] = crc;
 }
 
-void Frame::setPayload(const PayloadBuffer& payload) {
+void Frame::setEscapedPayload(const PayloadBuffer& payload) {
   std::copy(payload.begin(), payload.end(), mData.begin() + HEADER_SIZE);
 }
 

@@ -5,6 +5,15 @@
 
 using namespace xsm;
 
+void Coder::encode(const Payload& payload, Frame& frame) {
+  Utils::escape(payload, mEscapedPayload);
+  if (mEscapedPayload.DataSize > 0) {
+    frame.setEscapedPayload(mEscapedPayload.Data);
+    frame.setPayloadSize(static_cast<uint8_t>(mEscapedPayload.DataSize));
+    frame.setHeaderCrc(crc8(frame.getData().data(), HEADER_SIZE - 1));
+    frame.setPayloadCrc(crc8(payload.Data.data(), payload.DataSize));
+  }
+}
 
 void Coder::encode(const Payload& payload, Packet& packet) {
   // perform escaping in member buffer. this might makes the payload bigger
@@ -16,6 +25,7 @@ void Coder::encode(const Payload& payload, Packet& packet) {
     assemble(mEscapedPayload, packet);
   }
 }
+
 
 void Coder::assemble(const Payload& escapedPayload, Packet& encodedPacket) {
   // assemble the header
