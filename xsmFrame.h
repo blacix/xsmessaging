@@ -17,12 +17,14 @@ public:
 
   uint8_t getPayloadSize() const;
   uint8_t getHeaderCrc() const;
-  MessageBuffer getPayload() const;
+  MessageBuffer getPayloadBuffer() const;
+  Message getMessage() const;
   const PacketBuffer& getData() const;
   uint8_t getPayloadCrc() const;
   uint8_t getSize() const;
 
 private:
+  void copyMessage(MessageBuffer& message, const uint8_t payloadSize) const;
   PacketBuffer mData;
 };
 

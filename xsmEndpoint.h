@@ -25,7 +25,7 @@ private:
   RingBuffer mBufferIn;
   Decoder mProtocolDecoder;
   Coder mProtocolCoder;
-  std::vector<Message> mReceivedPayloads;
+  std::vector<Message> mReceivedMessages;
 };
 
 } // namespace xsm

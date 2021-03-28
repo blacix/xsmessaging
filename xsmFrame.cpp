@@ -30,10 +30,18 @@ uint8_t Frame::getHeaderCrc() const {
   return mData[HEADER_CRC_INDEX];
 }
 
-MessageBuffer Frame::getPayload() const {
-  MessageBuffer payload;
-  std::copy(mData.begin() + HEADER_SIZE, mData.begin() + getPayloadSize(), payload.begin());
-  return payload;
+MessageBuffer Frame::getPayloadBuffer() const {
+  MessageBuffer message;
+  copyMessage(message, getPayloadSize());
+  return message;
+}
+
+Message Frame::getMessage() const {
+  Message message;
+  uint8_t payloadSize = getPayloadSize();
+  copyMessage(message.Data, payloadSize);
+  message.Size = payloadSize;
+  return message;
 }
 
 const PacketBuffer& Frame::getData() const {
@@ -46,4 +54,8 @@ uint8_t Frame::getPayloadCrc() const {
 
 uint8_t Frame::getSize() const {
   return HEADER_SIZE + getPayloadSize() + FOOTER_SIZE;
+}
+
+void Frame::copyMessage(MessageBuffer& message, const uint8_t payloadSize) const {
+  std::copy(mData.begin() + HEADER_SIZE, mData.begin() + payloadSize, message.begin());
 }
