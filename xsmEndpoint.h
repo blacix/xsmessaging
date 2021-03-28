@@ -23,9 +23,9 @@ private:
 
   std::function<void(Payload)> mCallback;
   RingBuffer mBufferIn;
-  Decoder mProtocolCodec;
+  Decoder mProtocolDecoder;
   Coder mProtocolCoder;
-  std::vector<Payload> mReceivedPackets;
+  std::vector<Payload> mReceivedPayloads;
 };
 
 } // namespace xsm

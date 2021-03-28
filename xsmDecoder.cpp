@@ -29,37 +29,37 @@ size_t Decoder::decode(const RingBuffer& encodedPackets, std::vector<Payload>& d
       encodedPackets.get(i, mHeader.data(), HEADER_SIZE);
       // every packet starts with the frame byte
       if (mHeader[0] == FRAME_DELIMITER) {
-        // extract payload length
-        uint8_t payloadLength = mHeader[PAYLOAD_LENGTH_INDEX];
+        // extract payload size
+        uint8_t payloadSize = mHeader[PAYLOAD_SIZE_INDEX];
         // check header crc
         if (crc8MaximDallas(mHeader.data(), HEADER_SIZE - 1) == mHeader[2]) {
-          // check if we have enough data based on the payload length
-          uint16_t packetLength = HEADER_SIZE + payloadLength + FOOTER_SIZE;
-          if (encodedPackets.capacity() >= i + packetLength) {
+          // check if we have enough data based on the payload size
+          uint16_t packetSize = HEADER_SIZE + payloadSize + FOOTER_SIZE;
+          if (encodedPackets.capacity() >= i + packetSize) {
             // extract payload
 
             // copy payload to mPotentialPayload buffer
-            encodedPackets.get(i + HEADER_SIZE, mPotentialPayload.Data.data(), payloadLength);
-            mPotentialPayload.DataSize = payloadLength;
+            encodedPackets.get(i + HEADER_SIZE, mPotentialPayload.Data.data(), payloadSize);
+            mPotentialPayload.DataSize = payloadSize;
 
             // if there is unescaped delimiter in the payload that might be the start of a new packet
             // discard everything before it
-            int delimiterIndex = Utils::unescapedDelimiterPos(mPotentialPayload.Data, payloadLength);
+            int delimiterIndex = Utils::unescapedDelimiterPos(mPotentialPayload.Data, payloadSize);
             if (delimiterIndex > 0) {
               // discard all before this index
               bytesProcessed = i + HEADER_SIZE + delimiterIndex;
             } else {
               // check payload crc
               uint8_t payloadCrc = 0;
-              encodedPackets.get(i + HEADER_SIZE + payloadLength, payloadCrc);
-              if (crc8MaximDallas(mPotentialPayload.Data.data(), payloadLength) == payloadCrc) {
+              encodedPackets.get(i + HEADER_SIZE + payloadSize, payloadCrc);
+              if (crc8MaximDallas(mPotentialPayload.Data.data(), payloadSize) == payloadCrc) {
                 // remove escape characters
                 Utils::unescape(mPotentialPayload, mUnescapedPayload);
                 // add it to the output array of payloads
                 decodedPackets.push_back(mUnescapedPayload);
 
                 // move on to processing the next packet
-                i += packetLength;
+                i += packetSize;
                 bytesProcessed = i;
               }
             }
