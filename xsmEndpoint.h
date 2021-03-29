@@ -28,4 +28,5 @@ private:
 };
 
 } // namespace xsm
+
 #endif

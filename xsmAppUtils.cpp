@@ -76,4 +76,3 @@ void AppUtils::print(const uint8_t* packet, size_t packetSize) {
   }
    std::cout << ss.str() << std::endl;
 }
-

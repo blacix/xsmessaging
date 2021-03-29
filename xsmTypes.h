@@ -31,13 +31,6 @@ enum class ErrorCode {
 using MessageCallback = std::function<void(const xsm::Message)>;
 using ErrorCallback = std::function<void(const ErrorCode)>;
 
-
-// struct PacketRaw {
-//  PacketBuffer Data;
-//  size_t Size = 0;
-//};
-
-
 } // namespace xsm
 
 #endif
