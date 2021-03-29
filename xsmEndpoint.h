@@ -13,23 +13,17 @@ class Endpoint {
 public:
   Endpoint(std::function<void(Message)> callback);
   virtual ~Endpoint() = default;
-  virtual void send(const Message& message) = 0;
-
+  virtual void send(const Message& message);
   void receive(const uint8_t byte);
-  //void receive(const uint8_t* bytes, size_t size);
-  //void receive(const std::vector<uint8_t>& bytes);
 
 protected:
-  Coder mProtocolCoder;
+  virtual void sendSpecific(const uint8_t* data, const size_t size) = 0;
+  
+  Decoder mDecoder;
+  Coder mEncoder;
 
 private:
-  //void process();
-
   RingBuffer mBufferIn;
-  Decoder mProtocolDecoder;
-
-  std::vector<Message> mReceivedMessages;
-
   std::function<void(Message)> mCallback;
   
 };

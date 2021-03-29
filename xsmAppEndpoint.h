@@ -4,6 +4,8 @@
 class xsmAppEndpoint : public xsm::Endpoint {
 public:
   xsmAppEndpoint(std::function<void(xsm::Message)> callback);
-  virtual void send(const xsm::Message& message);
+
+protected:
+  virtual void sendSpecific(const uint8_t* data, const size_t size) override;
 };
 #endif // !XSM_APP_ENDPOINT_H

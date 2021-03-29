@@ -4,9 +4,8 @@ xsmAppEndpoint::xsmAppEndpoint(std::function<void(xsm::Message)> callback) : xsm
 
 }
 
-void xsmAppEndpoint::send(const xsm::Message& message) {
-  xsm::Frame frame = mProtocolCoder.encode(message);
-  for (size_t i = 0; i < frame.getSize(); ++i) {
-    receive(frame.getData()[i]);
+void xsmAppEndpoint::sendSpecific(const uint8_t* data, const size_t size) {
+  for (size_t i = 0; i < size; ++i) {
+    receive(data[i]);
   }
 }
