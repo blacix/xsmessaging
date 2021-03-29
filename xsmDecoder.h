@@ -25,14 +25,7 @@ public:
   Decoder(MessageCallback callback);
   ~Decoder() = default;
 
-  void receive(const uint8_t b);
-
-  // Decodes every packet from the encodedData buffer provided as input
-  // into the decodedPackets array that is the output
-  // returns the number of bytes processed in the encodedPayload input buffer
-  // thus the caller can remove processed bytes
-  size_t decode(const RingBuffer& encodedFrames);
-
+  void receive(const uint8_t byte);
 
 private:
 
@@ -47,16 +40,16 @@ private:
 
   State mState;
   std::function<void(Message)> mCallback;
+  uint8_t mPrevByte;
+  unsigned long long mDiscardedBytes;
+
   // preallocated helper buffer for unescaping
   Message mUnescapedPayload;
   // preallocated buffer for incoming payload
   Message mPotentialPayload;
   // preallocated buffer for incoming header
   HeaderBuffer mHeader;
-
-  uint8_t mPrevByte = FRAME_DELIMITER;
-
-  unsigned long long mDiscardedBytes = 0;
+  
 
   
 };
