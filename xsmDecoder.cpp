@@ -149,7 +149,7 @@ void Decoder::receive(const uint8_t byte) {
 
 // The ProtocolConfig::decode function uses a naive approach, that is,
 // it always starts interpreting the input buffer from the beginning.This has, of course, impact on the performance.
-size_t Decoder::decode(const RingBuffer& encodedFrames, std::vector<Message>& decodedMessages) {
+size_t Decoder::decode(const RingBuffer& encodedFrames) {
   // number of bytes processed in the
   size_t bytesProcessed = 0;
   // due to escaping the previusly processed byte need to be tracked
@@ -199,7 +199,7 @@ size_t Decoder::decode(const RingBuffer& encodedFrames, std::vector<Message>& de
                 // remove escape characters
                 Utils::unescape(mPotentialPayload, mUnescapedPayload);
                 // add it to the output array of payloads
-                decodedMessages.push_back(mUnescapedPayload);
+                mCallback(mUnescapedPayload);
 
                 // move on to processing the next packet
                 i += packetSize;
@@ -219,13 +219,9 @@ size_t Decoder::decode(const RingBuffer& encodedFrames, std::vector<Message>& de
     bytesProcessed = encodedFrames.capacity();
     mDiscardedBytes += bytesProcessed;
   } else {
-    // delimiter found
-    if (decodedMessages.size() < 1) {
-      // no packets found
-      // bytes before the delimiter are to be discarded
-      bytesProcessed = packetDelimiterIndex;
-      mDiscardedBytes += bytesProcessed;
-    }
+    // bytes before the delimiter are to be discarded
+    bytesProcessed = packetDelimiterIndex;
+    mDiscardedBytes += bytesProcessed;
   }
 
   return bytesProcessed;
