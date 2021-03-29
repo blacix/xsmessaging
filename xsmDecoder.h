@@ -6,7 +6,6 @@
 #include <functional>
 
 #include "xsmTypes.h"
-#include "xsmRingBuffer.h"
 
 namespace xsm {
 

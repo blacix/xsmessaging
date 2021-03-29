@@ -23,7 +23,6 @@ protected:
   Coder mEncoder;
 
 private:
-  RingBuffer mBufferIn;
   MessageCallback mCallback;
   
 };
