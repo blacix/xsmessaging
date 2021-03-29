@@ -36,6 +36,8 @@ public:
 
 private:
 
+  void reset();
+
   State mState;
   std::function<void(Message)> mCallback;
   // preallocated helper buffer for unescaping

@@ -24,10 +24,7 @@ void Decoder::receive(const uint8_t byte) {
         mHeader[PAYLOAD_SIZE_INDEX] = byte;
         mState = State::CRC;
       } else {
-        // reset
-        mState = State::DELIMITER;
-        mPotentialPayload.Size = 0;
-        mPrevByte = FRAME_DELIMITER;
+        reset();
       }
       break;
 
@@ -36,9 +33,7 @@ void Decoder::receive(const uint8_t byte) {
         mHeader[HEADER_CRC_INDEX] = byte;
         mState = State::PAYLOAD;
       } else {
-        mState = State::DELIMITER;
-        mPotentialPayload.Size = 0;
-        mPrevByte = FRAME_DELIMITER;
+        reset();
       }
       break;
 
@@ -61,9 +56,7 @@ void Decoder::receive(const uint8_t byte) {
           if (byte == FRAME_DELIMITER) {
             // not escaped frame delimiter -> start of a new frame
             // discard the current one
-            mState = State::DELIMITER;
-            mPotentialPayload.Size = 0;
-            mPrevByte = FRAME_DELIMITER;
+            reset();
 
             // handleDelimiter(uint8_t byte);
             mHeader[0] = byte;
@@ -83,9 +76,7 @@ void Decoder::receive(const uint8_t byte) {
           }
         }
       } else {
-        mState = State::DELIMITER;
-        mPotentialPayload.Size = 0;
-        mPrevByte = FRAME_DELIMITER;
+        reset();
       }
 
 
@@ -136,15 +127,22 @@ void Decoder::receive(const uint8_t byte) {
       if (calulatedCrc == byte) {
         mCallback(mPotentialPayload);
       }
-      mState = State::DELIMITER;
-      mPotentialPayload.Size = 0;
-      mPrevByte = FRAME_DELIMITER;
+
+      reset();
+
       break;
     }
 
     default:
       break;
   }
+}
+
+
+void Decoder::reset() {
+  mState = State::DELIMITER;
+  mPotentialPayload.Size = 0;
+  mPrevByte = FRAME_DELIMITER;
 }
 
 // The ProtocolConfig::decode function uses a naive approach, that is,
