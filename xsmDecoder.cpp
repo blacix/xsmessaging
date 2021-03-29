@@ -14,7 +14,6 @@ Decoder::Decoder(MessageCallback callback) :
 }
 
 void Decoder::receive(const uint8_t byte) {
-  bool escaped = false;
   switch (mState) {
     case State::DELIMITER:
       receiveDelimiter(byte);
