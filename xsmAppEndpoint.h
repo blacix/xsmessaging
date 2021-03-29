@@ -3,7 +3,7 @@
 #include "xsmEndpoint.h"
 class xsmAppEndpoint : public xsm::Endpoint {
 public:
-  xsmAppEndpoint(std::function<void(xsm::Message)> callback);
+  xsmAppEndpoint(xsm::MessageCallback callback);
 
 protected:
   virtual void sendSpecific(const uint8_t* data, const size_t size) override;

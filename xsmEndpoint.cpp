@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace xsm;
 
-Endpoint::Endpoint(std::function<void(Message)> callback) : mDecoder(callback), mCallback(callback) {}
+Endpoint::Endpoint(MessageCallback callback) : mDecoder(callback), mCallback(callback) {}
 
 void Endpoint::sendMessage(const Message& message) {
   Frame frame = mEncoder.encode(message);

@@ -22,7 +22,7 @@ public:
     CRC_PAYLOAD
   };
 
-  Decoder(std::function<void(Message)> callback);
+  Decoder(MessageCallback callback);
   ~Decoder() = default;
 
   void receive(const uint8_t b);

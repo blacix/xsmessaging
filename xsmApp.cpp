@@ -15,7 +15,7 @@ xsmApp::xsmApp() {
   endpoint.sendMessage(msg2);
 }
 
-void xsmApp::onMessageReceived(xsm::Message message) {
+void xsmApp::onMessageReceived(const xsm::Message message) {
   std::cout << "message received" << std::endl;
   xsm::AppUtils::print(message.Data.data(), message.Size);
 }

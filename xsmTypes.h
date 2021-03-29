@@ -1,6 +1,8 @@
 #ifndef XSM_TYPES_H
 #define XSM_TYPES_H
 #include <array>
+#include <functional>
+
 #include "xsmDefines.h"
 #include "xsmRingBuffer.h"
 
@@ -20,7 +22,17 @@ struct Message {
   size_t Size = 0;
 };
 
-//struct PacketRaw {
+enum class ErrorCode {
+  CRC_ERROR,
+  PROTOCOL_ERROR,
+  UNKNOWN_ERROR,
+};
+
+using MessageCallback = std::function<void(const xsm::Message)>;
+using ErrorCallback = std::function<void(const ErrorCode)>;
+
+
+// struct PacketRaw {
 //  PacketBuffer Data;
 //  size_t Size = 0;
 //};

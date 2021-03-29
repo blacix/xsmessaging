@@ -5,7 +5,7 @@
 
 using namespace xsm;
 
-Decoder::Decoder(std::function<void(Message)> callback) : mState(State::DELIMITER), mCallback(callback) {
+Decoder::Decoder(MessageCallback callback) : mState(State::DELIMITER), mCallback(callback) {
   mPotentialPayload.Size = 0;
 }
 
@@ -36,7 +36,6 @@ void Decoder::receive(const uint8_t byte) {
       break;
   }
 }
-
 
 void Decoder::receiveDelimiter(const uint8_t byte) {
   if (byte == FRAME_DELIMITER) {
@@ -70,6 +69,7 @@ void Decoder::receivePayload(const uint8_t byte) {
     if (escaped) {
       // escaped byte
       escaped = false;
+
       payloadToCrcPayload(byte);
     } else {
       // not escaped
@@ -83,56 +83,14 @@ void Decoder::receivePayload(const uint8_t byte) {
         if (byte == ESCAPE_BYTE) {
           escaped = true;
         }
-
         payloadToCrcPayload(byte);
       }
     }
   } else {
     reset();
   }
-
-
-  // if (!escaped && byte == FRAME_DELIMITER) {
-  //  mState = State::DELIMITER;
-  //  mPotentialPayload.Size = 0;
-  //  mPrevByte = FRAME_DELIMITER;
-
-  //  mHeader[0] = byte;
-  //  mState = State::SIZE;
-
-  //} else {
-  //  if (mPotentialPayload.Size < mHeader[PAYLOAD_SIZE_INDEX]) {
-  //    if (escaped) {
-  //      // escaped byte
-  //      escaped = false;
-
-  //      mPotentialPayload.Data[mPotentialPayload.Size] = byte;
-  //      ++mPotentialPayload.Size;
-
-  //      if (mPotentialPayload.Size >= mHeader[PAYLOAD_SIZE_INDEX]) {
-  //        mState = State::PAYLOAD_CRC;
-  //      }
-
-  //    } else {
-  //      // not escaped
-  //      if (byte == ESCAPE_BYTE) {
-  //        escaped = true;
-  //      }
-
-  //      mPotentialPayload.Data[mPotentialPayload.Size] = byte;
-  //      ++mPotentialPayload.Size;
-
-  //      if (mPotentialPayload.Size >= mHeader[PAYLOAD_SIZE_INDEX]) {
-  //        mState = State::PAYLOAD_CRC;
-  //      }
-  //    }
-  //  } else {
-  //    mState = State::DELIMITER;
-  //    mPotentialPayload.Size = 0;
-  //    mPrevByte = FRAME_DELIMITER;
-  //  }
-  //}
 }
+
 void Decoder::receivePayloadCrc(const uint8_t byte) {
   uint8_t calulatedCrc = crc8(mPotentialPayload.Data.data(), mHeader[PAYLOAD_SIZE_INDEX]);
   if (calulatedCrc == byte) {

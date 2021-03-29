@@ -11,7 +11,7 @@ namespace xsm {
 
 class Endpoint {
 public:
-  Endpoint(std::function<void(Message)> callback);
+  Endpoint(MessageCallback callback);
   virtual ~Endpoint() = default;
   virtual void sendMessage(const Message& message);
   void receive(const uint8_t byte);
@@ -24,7 +24,7 @@ protected:
 
 private:
   RingBuffer mBufferIn;
-  std::function<void(Message)> mCallback;
+  MessageCallback mCallback;
   
 };
 

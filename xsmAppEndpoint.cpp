@@ -1,6 +1,6 @@
 #include "xsmAppEndpoint.h"
 
-xsmAppEndpoint::xsmAppEndpoint(std::function<void(xsm::Message)> callback) : xsm::Endpoint(callback){
+xsmAppEndpoint::xsmAppEndpoint(xsm::MessageCallback callback) : xsm::Endpoint(callback){
 
 }
 
