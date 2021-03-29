@@ -17,9 +17,9 @@ public:
   enum class State {
     DELIMITER,
     SIZE,
-    CRC,
+    CRC_HEADER,
     PAYLOAD,
-    PAYLOAD_CRC
+    CRC_PAYLOAD
   };
 
   Decoder(std::function<void(Message)> callback);
@@ -36,6 +36,13 @@ public:
 
 private:
 
+  void receiveDelimiter(const uint8_t byte);
+  void receiveSize(const uint8_t byte);
+  void receiveHeaderCrc(const uint8_t byte);
+  void receivePayload(const uint8_t byte);
+  void receivePayloadCrc(const uint8_t byte);
+
+  void payloadToCrcPayload(const uint8_t byte);
   void reset();
 
   State mState;
