@@ -13,7 +13,7 @@ class Endpoint {
 public:
   Endpoint(std::function<void(Message)> callback);
   virtual ~Endpoint() = default;
-  virtual void send(const Message& message);
+  virtual void sendMessage(const Message& message);
   void receive(const uint8_t byte);
 
 protected:

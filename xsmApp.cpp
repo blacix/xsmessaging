@@ -11,8 +11,8 @@ xsmApp::xsmApp() {
 
   xsm::Message msg1{{'a', 'b', 'c'}, 3};
   xsm::Message msg2{{'c', 'd', 'e'}, 3};
-  endpoint.send(msg1);
-  endpoint.send(msg2);
+  endpoint.sendMessage(msg1);
+  endpoint.sendMessage(msg2);
 }
 
 void xsmApp::onMessageReceived(xsm::Message message) {
