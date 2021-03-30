@@ -23,7 +23,6 @@ protected:
   Coder mEncoder;
 
 private:
-  MessageCallback mCallback;
   
 };
 
