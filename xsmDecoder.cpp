@@ -5,7 +5,7 @@
 
 using namespace xsm;
 
-Decoder::Decoder(MessageCallback callback) :
+Decoder::Decoder(IMessageCallback& callback) :
     mState(State::DELIMITER),
     mCallback(callback),
     mPrevByte(FRAME_DELIMITER),
@@ -97,7 +97,7 @@ void Decoder::receivePayload(const uint8_t byte) {
 void Decoder::receivePayloadCrc(const uint8_t byte) {
   uint8_t calulatedCrc = crc8(mPotentialPayload.Data.data(), mHeader[PAYLOAD_SIZE_INDEX]);
   if (calulatedCrc == byte) {
-    mCallback(mPotentialPayload);
+    mCallback.onMessageReceived(mPotentialPayload);
   }
 
   reset();

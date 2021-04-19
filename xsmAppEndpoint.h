@@ -1,9 +1,10 @@
 #ifndef XSM_APP_ENDPOINT_H
 #define XSM_APP_ENDPOINT_H
 #include "xsmEndpoint.h"
+
 class xsmAppEndpoint : public xsm::Endpoint {
 public:
-  xsmAppEndpoint(xsm::MessageCallback callback);
+  xsmAppEndpoint(xsm::IMessageCallback& callback);
 
 protected:
   virtual void sendSpecific(const uint8_t* data, const size_t size) override;

@@ -11,7 +11,7 @@ namespace xsm {
 
 class Endpoint {
 public:
-  Endpoint(MessageCallback callback);
+  Endpoint(IMessageCallback& callback);
   virtual ~Endpoint() = default;
   virtual void sendMessage(const Message& message);
   void receive(const uint8_t byte);

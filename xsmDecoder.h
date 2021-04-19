@@ -7,27 +7,20 @@
 
 #include "xsmTypes.h"
 
+
 namespace xsm {
 
 class Decoder {
 
 public:
+  enum class State { DELIMITER, SIZE, CRC_HEADER, PAYLOAD, CRC_PAYLOAD };
 
-  enum class State {
-    DELIMITER,
-    SIZE,
-    CRC_HEADER,
-    PAYLOAD,
-    CRC_PAYLOAD
-  };
-
-  Decoder(MessageCallback callback);
+  Decoder(IMessageCallback& callback);
   ~Decoder() = default;
 
   void receive(const uint8_t byte);
 
 private:
-
   void receiveDelimiter(const uint8_t byte);
   void receiveSize(const uint8_t byte);
   void receiveHeaderCrc(const uint8_t byte);
@@ -38,7 +31,7 @@ private:
   void reset();
 
   State mState;
-  std::function<void(Message)> mCallback;
+  IMessageCallback& mCallback;
   uint8_t mPrevByte;
   unsigned long long mDiscardedBytes;
 
@@ -48,9 +41,6 @@ private:
   Message mPotentialPayload;
   // preallocated buffer for incoming header
   HeaderBuffer mHeader;
-  
-
-  
 };
 
 

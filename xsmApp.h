@@ -3,12 +3,13 @@
 #include <vector>
 
 #include "xsmDecoder.h"
+#include "xsmTypes.h"
 
-class xsmApp {
+class xsmApp : public xsm::IMessageCallback {
 public:
   xsmApp();
 
-  void onMessageReceived(const xsm::Message payload);
+  void onMessageReceived(const xsm::Message message) override;
 };
 
 #endif

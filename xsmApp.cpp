@@ -7,7 +7,7 @@
 
 
 xsmApp::xsmApp() {
-  xsmAppEndpoint endpoint(std::bind(&xsmApp::onMessageReceived, this, std::placeholders::_1));
+  xsmAppEndpoint endpoint(*this);
 
   xsm::Message msg1{{'a', 'b', 'c'}, 3};
   xsm::Message msg2{{'c', 'd', 'e'}, 3};

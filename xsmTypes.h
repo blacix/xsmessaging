@@ -28,8 +28,14 @@ enum class ErrorCode {
   UNKNOWN_ERROR,
 };
 
-using MessageCallback = std::function<void(const xsm::Message)>;
-using ErrorCallback = std::function<void(const ErrorCode)>;
+class IMessageCallback {
+public:
+  virtual void onMessageReceived(const Message) = 0;
+};
+
+
+// using MessageCallback = std::function<void(const xsm::Message)>;
+// using ErrorCallback = std::function<void(const ErrorCode)>;
 
 } // namespace xsm
 
