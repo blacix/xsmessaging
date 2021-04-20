@@ -19,7 +19,6 @@ public:
   uint8_t getPayloadSize() const;
   uint8_t getHeaderCrc() const;
   const MessageBuffer& getPayloadBuffer() const;
-  // const Message& getPayload() const;
   const FrameBuffer getData() const;
   uint8_t getPayloadCrc() const;
   uint8_t getSize() const;

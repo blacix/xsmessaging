@@ -44,10 +44,6 @@ const MessageBuffer& Frame::getPayloadBuffer() const {
   return mPayload;
 }
 
-//const Message& Frame::getPayload() const {
-//  return mPayload;
-//}
-
 const FrameBuffer Frame::getData() const {
   FrameBuffer buffer;
   std::copy(mHeader.begin(), mHeader.end(), buffer.begin());
