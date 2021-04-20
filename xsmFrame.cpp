@@ -16,11 +16,11 @@ void Frame::setHeaderCrc(const uint8_t crc) {
 }
 
 void Frame::setEscapedPayloadBuffer(const MessageBuffer& payload) {
-  std::copy(payload.begin(), payload.end(), mPayload.Data.begin());
+  std::copy(payload.begin(), payload.end(), mPayload.begin());
 }
 
 void Frame::setEscapedPayload(const Message& payload) {
-  mPayload = payload;
+  mPayload = payload.Data;
   setPayloadSize(static_cast<uint8_t>(payload.Size));
 }
 
@@ -41,23 +41,23 @@ uint8_t Frame::getHeaderCrc() const {
 }
 
 const MessageBuffer& Frame::getPayloadBuffer() const {
-  return mPayload.Data;
-}
-
-const Message& Frame::getPayload() const {
   return mPayload;
 }
+
+//const Message& Frame::getPayload() const {
+//  return mPayload;
+//}
 
 const FrameBuffer Frame::getData() const {
   FrameBuffer buffer;
   std::copy(mHeader.begin(), mHeader.end(), buffer.begin());
-  std::copy(mPayload.Data.begin(), mPayload.Data.end(), buffer.begin() + HEADER_SIZE);
+  std::copy(mPayload.begin(), mPayload.end(), buffer.begin() + HEADER_SIZE);
   buffer[static_cast<size_t>(HEADER_SIZE) + getPayloadSize()] = mPayloadCrc;
   return buffer;
 }
 
 uint8_t Frame::getPayloadCrc() const {
-  return mPayload.Data[static_cast<size_t>(getPayloadSize())];
+  return mPayloadCrc;
 }
 
 uint8_t Frame::getSize() const {

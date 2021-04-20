@@ -24,7 +24,9 @@ void Utils::escape(const Message& unescapedPayload, Message& escapedPayload) {
 }
 
 
-void Utils::unescape(const Message& escapedPayload, Message& unEscapedPayload) {
+size_t Utils::unescape(const MessageBuffer& escapedPayload,
+                       const size_t escapedPayloadSize,
+                     MessageBuffer& unEscapedPayload) {
   int skippedBytes = 0;
   // helper variable to remove the first escape character only.
   // this is the case when the escape charcter is escaped in the payload
@@ -32,8 +34,8 @@ void Utils::unescape(const Message& escapedPayload, Message& unEscapedPayload) {
 
   // iterate through escapedPayload buffer and remove escaped characters
   size_t unescapedPayloadSize = 0;
-  for (size_t i = 0; i < escapedPayload.Size; i++) {
-    if (escapedPayload.Data[i] == ESCAPE_BYTE) {
+  for (size_t i = 0; i < escapedPayloadSize; i++) {
+    if (escapedPayload[i] == ESCAPE_BYTE) {
       if (escaped) {
         // prev byte was the escape character
         // this byte is also the escape character
@@ -42,16 +44,16 @@ void Utils::unescape(const Message& escapedPayload, Message& unEscapedPayload) {
       } else {
         // prev byte was not the escape character
         escaped = true;
-        unEscapedPayload.Data[unescapedPayloadSize] = escapedPayload.Data[i];
+        unEscapedPayload[unescapedPayloadSize] = escapedPayload[i];
         ++unescapedPayloadSize;
       }
     } else {
-      unEscapedPayload.Data[unescapedPayloadSize] = escapedPayload.Data[i];
+      unEscapedPayload[unescapedPayloadSize] = escapedPayload[i];
       ++unescapedPayloadSize;
-    }    
+    }
   }
 
-  unEscapedPayload.Size = unescapedPayloadSize;
+  return unescapedPayloadSize;
 }
 
 int Utils::unescapedDelimiterPos(const MessageBuffer& buffer, const size_t bufferSize) {

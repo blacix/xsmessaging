@@ -14,7 +14,9 @@ public:
 
   // Helper function to remove escape characters from an escaped payload
   // returns the number of escae bytes removed from the buffer
-  static void unescape(const Message& escapedPayload, Message& unEscapedPayload);
+  static size_t unescape(const MessageBuffer& escapedPayload,
+                         const size_t escapedPayloadSize,
+                       MessageBuffer& unEscapedPayload);
 
   // helper method that searches for unescaped delimiter in the buffer
   static int unescapedDelimiterPos(const MessageBuffer& buffer, const size_t bufferSize);

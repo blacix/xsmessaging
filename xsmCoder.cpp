@@ -11,7 +11,7 @@ const Frame Coder::encode(const Message& payload) {
   if (mEscapedPayload.Size > 0) {
     frame.setEscapedPayload(mEscapedPayload);
     frame.setHeaderCrc(crc8(frame.getData().data(), HEADER_SIZE - 1));
-    frame.setPayloadCrc(crc8(payload.Data.data(), payload.Size));
+    frame.setPayloadCrc(crc8(mEscapedPayload.Data.data(), mEscapedPayload.Size));
   }
   return frame;
 }

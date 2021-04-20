@@ -16,6 +16,6 @@ void Endpoint::receive(const uint8_t byte) {
 
 void Endpoint::onFrameReceived(const Frame& frame) {
   Message message;
-  Utils::unescape(frame.getPayload(), message);
+  message.Size = Utils::unescape(frame.getPayloadBuffer(), frame.getPayloadSize(), message.Data);
   mCallback.onMessageReceived(message);
 }
