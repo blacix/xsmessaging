@@ -45,14 +45,12 @@ void Decoder::receive(const uint8_t byte) {
 void Decoder::receiveDelimiter(const uint8_t byte) {
   if (byte == FRAME_DELIMITER) {
     // Frame sets this in contructor
-    //mHeader[0] = byte;
     mState = State::SIZE;
   }
 }
 
 void Decoder::receiveSize(const uint8_t byte) {
   if (byte <= MAX_PAYLOAD_SIZE) {
-    //mHeader[PAYLOAD_SIZE_INDEX] = byte;
     mFrame.setPayloadSize(byte);
     mState = State::CRC_HEADER;
   } else {
@@ -61,10 +59,8 @@ void Decoder::receiveSize(const uint8_t byte) {
 }
 
 void Decoder::receiveHeaderCrc(const uint8_t byte) {
-  //if (crc8(mHeader.data(), HEADER_SIZE - 1) == byte) {
   if (crc8(mFrame.getHeaderBuffer().data(), HEADER_SIZE - 1) == byte) {
     mFrame.setHeaderCrc(byte);
-    // mHeader[HEADER_CRC_INDEX] = byte;
     mState = State::PAYLOAD;
   } else {
     reset();
@@ -101,7 +97,6 @@ void Decoder::receivePayload(const uint8_t byte) {
 }
 
 void Decoder::receivePayloadCrc(const uint8_t byte) {
-  //mPayloadCrc = crc8(mPotentialPayload.Data.data(), mHeader[PAYLOAD_SIZE_INDEX]);
   mPayloadCrc = crc8(mPotentialPayload.Data.data(), mFrame.getPayloadSize());
   if (mPayloadCrc == byte) {
     mFrame.setEscapedPayload(mPotentialPayload);
@@ -117,7 +112,6 @@ void Decoder::payloadToCrcPayload(const uint8_t byte) {
   ++mPotentialPayload.Size;
   mPrevByte = byte;
 
-  //if (mPotentialPayload.Size >= mHeader[PAYLOAD_SIZE_INDEX]) {
   if (mPotentialPayload.Size >= mFrame.getPayloadSize()) {
     mState = State::CRC_PAYLOAD;
   }

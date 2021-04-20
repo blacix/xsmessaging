@@ -21,12 +21,10 @@ void Frame::setEscapedPayloadBuffer(const MessageBuffer& payload) {
 
 void Frame::setEscapedPayload(const Message& payload) {
   mPayload = payload;
-  //setEscapedPayloadBuffer(payload.Data);
   setPayloadSize(static_cast<uint8_t>(payload.Size));
 }
 
 void Frame::setPayloadCrc(const uint8_t crc) {
-  // mPayload.Data[static_cast<size_t>(getPayloadSize())] = crc;
   mPayloadCrc = crc;
 }
 
@@ -54,7 +52,7 @@ const FrameBuffer Frame::getData() const {
   FrameBuffer buffer;
   std::copy(mHeader.begin(), mHeader.end(), buffer.begin());
   std::copy(mPayload.Data.begin(), mPayload.Data.end(), buffer.begin() + HEADER_SIZE);
-  buffer[HEADER_SIZE + getPayloadSize() + FOOTER_SIZE - 1] = mPayloadCrc;
+  buffer[static_cast<size_t>(HEADER_SIZE) + getPayloadSize()] = mPayloadCrc;
   return buffer;
 }
 
