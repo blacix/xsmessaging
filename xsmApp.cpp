@@ -12,7 +12,8 @@ xsmApp::xsmApp() {
   msg1.Data[3] = xsm::FRAME_DELIMITER;
   endpoint.sendMessage(msg1);
 
-  xsm::Message msg2{{'c', 'd', 'e'}, 3};
+  xsm::Message msg2{{'a', 'b', 'c', 'd'}, 4};
+  msg2.Data[3] = xsm::ESCAPE_BYTE;
   endpoint.sendMessage(msg2);
 }
 
