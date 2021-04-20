@@ -9,11 +9,11 @@
 xsmApp::xsmApp() {
   xsmAppEndpoint endpoint(*this);
   xsm::Message msg1{{'a', 'b', 'c', 'd'}, 4};
-  msg1.Data[3] = xsm::FRAME_DELIMITER;
+  msg1.Data[3] = xsm::FRAME_DELIMITER; // test escaping
   endpoint.sendMessage(msg1);
 
   xsm::Message msg2{{'a', 'b', 'c', 'd'}, 4};
-  msg2.Data[3] = xsm::ESCAPE_BYTE;
+  msg2.Data[3] = xsm::ESCAPE_BYTE; // test escaping
   endpoint.sendMessage(msg2);
 }
 
