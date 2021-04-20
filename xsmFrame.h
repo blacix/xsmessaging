@@ -5,28 +5,34 @@
 
 namespace xsm {
 
+
 class Frame {
 public:
-
   Frame();
-
   void setPayloadSize(const uint8_t length);
   void setHeaderCrc(const uint8_t crc);
   void setEscapedPayloadBuffer(const MessageBuffer& payload);
   void setEscapedPayload(const Message& payload);
   void setPayloadCrc(const uint8_t crc);
 
+  const HeaderBuffer& getHeaderBuffer() const;
   uint8_t getPayloadSize() const;
   uint8_t getHeaderCrc() const;
-  MessageBuffer getPayloadBuffer() const;
-  Message getPayload() const;
-  const PacketBuffer& getData() const;
+  const MessageBuffer& getPayloadBuffer() const;
+  const Message& getPayload() const;
+  const FrameBuffer getData() const;
   uint8_t getPayloadCrc() const;
   uint8_t getSize() const;
 
 private:
-  void copyMessage(MessageBuffer& message, const uint8_t payloadSize) const;
-  PacketBuffer mData;
+  Message mPayload;
+  HeaderBuffer mHeader;
+  uint8_t mPayloadCrc;
+};
+
+class IFrameCallback {
+public:
+  virtual void onFrameReceived(const Frame& frame) = 0;
 };
 
 } // namespace xsm

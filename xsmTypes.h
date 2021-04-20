@@ -10,7 +10,7 @@
 namespace xsm {
 
 // fix sized buffer for packets
-typedef std::array<uint8_t, MAX_FRAME_SIZE> PacketBuffer;
+typedef std::array<uint8_t, MAX_FRAME_SIZE> FrameBuffer;
 typedef std::array<uint8_t, MAX_PAYLOAD_SIZE> MessageBuffer;
 // buffer for packet header
 typedef std::array<uint8_t, HEADER_SIZE> HeaderBuffer;

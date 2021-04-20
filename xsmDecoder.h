@@ -6,7 +6,7 @@
 #include <functional>
 
 #include "xsmTypes.h"
-
+#include "xsmFrame.h"
 
 namespace xsm {
 
@@ -15,7 +15,7 @@ class Decoder {
 public:
   enum class State { DELIMITER, SIZE, CRC_HEADER, PAYLOAD, CRC_PAYLOAD };
 
-  Decoder(IMessageCallback& callback);
+  Decoder(IFrameCallback& callback);
   ~Decoder() = default;
 
   void receive(const uint8_t byte);
@@ -31,16 +31,16 @@ private:
   void reset();
 
   State mState;
-  IMessageCallback& mCallback;
+  IFrameCallback& mCallback;
   uint8_t mPrevByte;
   unsigned long long mDiscardedBytes;
 
-  // preallocated helper buffer for unescaping
-  Message mUnescapedPayload;
   // preallocated buffer for incoming payload
   Message mPotentialPayload;
   // preallocated buffer for incoming header
-  HeaderBuffer mHeader;
+  // HeaderBuffer mHeader;
+  Frame mFrame;
+  uint8_t mPayloadCrc;
 };
 
 
