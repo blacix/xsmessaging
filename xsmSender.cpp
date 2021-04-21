@@ -6,12 +6,17 @@
 
 using namespace xsm;
 
-Sender::Sender(ISender& sendImpl) : mSendImpl(sendImpl) {}
+Sender::Sender(const Escaping escaping, ISender& sendImpl) : mEscaping(escaping), mSendImpl(sendImpl) {}
 
 void Sender::send(const Message& message) {
-  Utils::escape(message, mEscapedPayload);
-  if (mEscapedPayload.Size > 0) {
-    Frame frame{mEscapedPayload};
+  if (mEscaping == Escaping::ON) {
+    Utils::escape(message, mEscapedPayload);
+    if (mEscapedPayload.Size > 0) {
+      Frame frame{mEscapedPayload};
+      mSendImpl.send(frame.getData().data(), frame.getSize());
+    }
+  } else {
+    Frame frame{message};
     mSendImpl.send(frame.getData().data(), frame.getSize());
   }
 }

@@ -19,13 +19,12 @@ typedef RingBufferT<INPUT_BUFFER_SIZE> RingBuffer;
 
 struct Message {
   MessageBuffer Data;
-  size_t Size = 0;
+  uint32_t Size = 0;
 };
 
-enum class ErrorCode {
-  CRC_ERROR,
-  PROTOCOL_ERROR,
-  UNKNOWN_ERROR,
+enum class Escaping {
+  ON,
+  OFF,
 };
 
 class IMessageCallback {

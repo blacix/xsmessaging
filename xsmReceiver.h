@@ -14,7 +14,7 @@ namespace xsm {
 class Receiver {
 
 public:
-  Receiver(IReceiver& callback);
+  Receiver(const Escaping escaping, IReceiver& callback);
   ~Receiver() = default;
 
   void receive(const uint8_t* bytes, const size_t size);
@@ -30,11 +30,12 @@ private:
   void receivePayload(const uint8_t byte);
   void receivePayloadCrc(const uint8_t byte);
 
-  void payloadToCrcPayload(const uint8_t byte);
+  void storePayload(const uint8_t byte);
   void reset();
 
   void processFrame();
 
+  Escaping mEscaping;
   IReceiver& mCallback;
 
   State mState;

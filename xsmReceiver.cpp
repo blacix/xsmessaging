@@ -5,20 +5,21 @@
 
 using namespace xsm;
 
-void Receiver::receive(const uint8_t* bytes, const size_t size) {
-  for (size_t i = 0; i < size; ++i) {
-    receive(bytes[i]);
-  }
-}
-
-Receiver::Receiver(IReceiver& callback) :
-    mState(State::DELIMITER),
+Receiver::Receiver(const Escaping escaping, IReceiver& callback) :
+    mEscaping(escaping),
     mCallback(callback),
+    mState(State::DELIMITER),
     mPrevByte(FRAME_DELIMITER),
     mDiscardedBytes(0) {
   mPotentialPayload.Size = 0;
   mFrame.setHeaderCrc(0);
   mFrame.setPayloadSize(0);
+}
+
+void Receiver::receive(const uint8_t* bytes, const size_t size) {
+  for (size_t i = 0; i < size; ++i) {
+    receive(bytes[i]);
+  }
 }
 
 void Receiver::receive(const uint8_t byte) {
@@ -76,29 +77,33 @@ void Receiver::receiveHeaderCrc(const uint8_t byte) {
 
 void Receiver::receivePayload(const uint8_t byte) {
   if (mPotentialPayload.Size < mFrame.getPayloadSize()) {
-    bool escaped = mPrevByte == ESCAPE_BYTE;
+    if (mEscaping == Escaping::ON) {
+      bool escaped = mPrevByte == ESCAPE_BYTE;
 
-    if (escaped) {
-      // escaped byte
-      escaped = false;
+      if (escaped) {
+        // escaped byte
+        escaped = false;
 
-      payloadToCrcPayload(byte);
-    } else {
-      // not escaped
-      if (byte == FRAME_DELIMITER) {
-        // not escaped frame delimiter -> start of a new frame
-        // discard the current one
-        reset();
-        // handle receiving the delimiter
-        receiveDelimiter(byte);
-      } else if (byte == FRAME_DELIMITER2) {
-        reset();
+        storePayload(byte);
       } else {
-        if (byte == ESCAPE_BYTE) {
-          escaped = true;
+        // not escaped
+        if (byte == FRAME_DELIMITER) {
+          // not escaped frame delimiter -> start of a new frame
+          // discard the current one
+          reset();
+          // handle receiving the delimiter
+          receiveDelimiter(byte);
+        } else if (byte == FRAME_DELIMITER2) {
+          reset();
+        } else {
+          if (byte == ESCAPE_BYTE) {
+            escaped = true;
+          }
+          storePayload(byte);
         }
-        payloadToCrcPayload(byte);
       }
+    } else {
+      storePayload(byte);
     }
   } else {
     reset();
@@ -116,7 +121,7 @@ void Receiver::receivePayloadCrc(const uint8_t byte) {
   reset();
 }
 
-void Receiver::payloadToCrcPayload(const uint8_t byte) {
+void Receiver::storePayload(const uint8_t byte) {
   mPotentialPayload.Data[mPotentialPayload.Size] = byte;
   ++mPotentialPayload.Size;
   mPrevByte = byte;
@@ -137,6 +142,12 @@ void Receiver::reset() {
 
 void Receiver::processFrame() {
   Message message;
-  message.Size = Utils::unescape(mFrame.getPayloadBuffer(), mFrame.getPayloadSize(), message.Data);
+  if (mEscaping == Escaping::ON) {
+    message.Size = Utils::unescape(mFrame.getPayloadBuffer(), mFrame.getPayloadSize(), message.Data);
+    mCallback.onMessageReceived(message);
+  } else {
+    message.Size = mFrame.getPayloadSize();
+    message.Data = mFrame.getPayloadBuffer();
+  }
   mCallback.onMessageReceived(message);
 }
