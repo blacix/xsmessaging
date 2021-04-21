@@ -9,6 +9,7 @@ namespace xsm {
 class Frame {
 public:
   Frame();
+  Frame(const Message& payload);
   void setPayloadSize(const uint8_t length);
   void setHeaderCrc(const uint8_t crc);
   void setEscapedPayloadBuffer(const MessageBuffer& payload);

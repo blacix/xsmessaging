@@ -3,7 +3,6 @@
 #include <functional>
 #include <vector>
 
-#include "xsmCoder.h"
 #include "xsmDecoder.h"
 #include "xsmFrame.h"
 
@@ -21,7 +20,6 @@ protected:
   virtual void sendSpecific(const uint8_t* data, const size_t size) = 0;
   IMessageCallback& mCallback;
   Decoder mDecoder;
-  Coder mEncoder;
 
 private:
   // preallocated helper buffer for escaping

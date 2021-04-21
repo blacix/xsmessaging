@@ -3,9 +3,6 @@
 #include <string>
 #include <vector>
 
-
-namespace xsm {
-
 class AppUtils {
 public:
   AppUtils() = default;
@@ -20,5 +17,4 @@ public:
   static void print(const uint8_t* packet, size_t packetSize);
 };
 
-} // namespace xsm
 #endif

@@ -33,9 +33,6 @@
     <ClCompile Include="xsmUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xsmCoder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="xsmCRC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -72,9 +69,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xsmDefines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="xsmCoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xsmFrame.h">

@@ -8,7 +8,7 @@ Endpoint::Endpoint(IMessageCallback& callback) : mCallback(callback), mDecoder(*
 void Endpoint::sendMessage(const Message& message) {
   Utils::escape(message, mEscapedPayload);
   if (mEscapedPayload.Size > 0) {
-    Frame frame = mEncoder.encode(message);
+    Frame frame{message};
     sendSpecific(frame.getData().data(), frame.getSize());
   }
 }
