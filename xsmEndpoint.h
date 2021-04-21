@@ -24,7 +24,8 @@ protected:
   Coder mEncoder;
 
 private:
-  
+  // preallocated helper buffer for escaping
+  Message mEscapedPayload;
 };
 
 } // namespace xsm

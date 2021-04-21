@@ -6,8 +6,11 @@ using namespace xsm;
 Endpoint::Endpoint(IMessageCallback& callback) : mCallback(callback), mDecoder(*this) {}
 
 void Endpoint::sendMessage(const Message& message) {
-  Frame frame = mEncoder.encode(message);
-  sendSpecific(frame.getData().data(), frame.getSize());
+  Utils::escape(message, mEscapedPayload);
+  if (mEscapedPayload.Size > 0) {
+    Frame frame = mEncoder.encode(message);
+    sendSpecific(frame.getData().data(), frame.getSize());
+  }
 }
 
 void Endpoint::receive(const uint8_t byte) {

@@ -11,8 +11,7 @@ public:
   const Frame encode(const Message& payload);
 
 private:
-  // preallocated helper buffer for escaping
-  Message mEscapedPayload;
+
 };
 
 } // namespace xsm
