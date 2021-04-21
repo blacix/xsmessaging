@@ -4,7 +4,7 @@
 
 #include "AppUtils.h"
 
-xsmApp::xsmApp() : mSender(*this), mReceiver(*this) {
+xsmApp::xsmApp() : mSender(xsm::Escaping::ON, *this), mReceiver(xsm::Escaping::ON, * this) {
   xsm::Message msg1{{'a', 'b', 'c', 'd'}, 4};
   msg1.Data[3] = xsm::FRAME_DELIMITER; // test escaping
   mSender.send(msg1);

@@ -78,27 +78,21 @@ void Receiver::receiveHeaderCrc(const uint8_t byte) {
 void Receiver::receivePayload(const uint8_t byte) {
   if (mPotentialPayload.Size < mFrame.getPayloadSize()) {
     if (mEscaping == Escaping::ON) {
-      bool escaped = mPrevByte == ESCAPE_BYTE;
-
-      if (escaped) {
+      if (mPrevByte == ESCAPE_BYTE) {
         // escaped byte
-        escaped = false;
-
         storePayload(byte);
       } else {
         // not escaped
         if (byte == FRAME_DELIMITER) {
-          // not escaped frame delimiter -> start of a new frame
+          // not escaped FRAME_DELIMITER -> start of a new frame
           // discard the current one
           reset();
           // handle receiving the delimiter
           receiveDelimiter(byte);
         } else if (byte == FRAME_DELIMITER2) {
+          // not escaped FRAME_DELIMITER2 -> something's wrong
           reset();
         } else {
-          if (byte == ESCAPE_BYTE) {
-            escaped = true;
-          }
           storePayload(byte);
         }
       }
@@ -148,6 +142,6 @@ void Receiver::processFrame() {
   } else {
     message.Size = mFrame.getPayloadSize();
     message.Data = mFrame.getPayloadBuffer();
+    mCallback.onMessageReceived(message);
   }
-  mCallback.onMessageReceived(message);
 }
