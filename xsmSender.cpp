@@ -11,7 +11,7 @@ Sender::Sender(const Escaping escaping, ISender& sendImpl) : mEscaping(escaping)
 void Sender::send(const Message& message) {
   if (mEscaping == Escaping::ON) {
     bool success = Utils::escape(message, mEscapedPayload);
-    if (success > 0) {
+    if (success) {
       Frame frame{mEscapedPayload};
       mSendImpl.send(frame.getFrameBuffer().data(), frame.getSize());
     }
