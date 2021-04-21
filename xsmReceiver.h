@@ -17,6 +17,7 @@ public:
   Receiver(IReceiver& callback);
   ~Receiver() = default;
 
+  void receive(const uint8_t* bytes, const size_t size);
   void receive(const uint8_t byte);
 
 private:

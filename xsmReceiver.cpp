@@ -5,6 +5,12 @@
 
 using namespace xsm;
 
+void Receiver::receive(const uint8_t* bytes, const size_t size) {
+  for (size_t i = 0; i < size; ++i) {
+    receive(bytes[i]);
+  }
+}
+
 Receiver::Receiver(IReceiver& callback) :
     mState(State::DELIMITER),
     mCallback(callback),
