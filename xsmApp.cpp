@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "xsmAppUtils.h"
-#include "xsmDefines.h"
 
 xsmApp::xsmApp() : mSender(*this), mReceiver(*this) {
   xsm::Message msg1{{'a', 'b', 'c', 'd'}, 4};

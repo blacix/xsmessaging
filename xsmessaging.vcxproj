@@ -144,7 +144,7 @@
     <ClCompile Include="xsmApp.cpp" />
     <ClCompile Include="xsmReceiver.cpp" />
     <ClCompile Include="xsmSender.cpp" />
-    <ClCompile Include="xsmessaging.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="xsmFrame.cpp" />
     <ClCompile Include="xsmUtils.cpp" />
   </ItemGroup>
