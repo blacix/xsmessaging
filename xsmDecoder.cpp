@@ -85,6 +85,8 @@ void Decoder::receivePayload(const uint8_t byte) {
         reset();
         // handle receiving the delimiter
         receiveDelimiter(byte);
+      } else if (byte == FRAME_DELIMITER2) {
+        reset();
       } else {
         if (byte == ESCAPE_BYTE) {
           escaped = true;

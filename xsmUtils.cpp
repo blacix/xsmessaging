@@ -10,7 +10,7 @@ void Utils::escape(const Message& unescapedPayload, Message& escapedPayload) {
   for (size_t i = 0; i < unescapedPayload.Size && escapedPayloadSize < escapedPayload.Data.size(); i++) {
     uint8_t b = unescapedPayload.Data[i];
     // the frame delimiter and the escape byte itself are to be escaped
-    if (b == FRAME_DELIMITER || b == ESCAPE_BYTE) {
+    if (b == FRAME_DELIMITER || b == FRAME_DELIMITER2 || b == ESCAPE_BYTE) {
       escapedPayload.Data[escapedPayloadSize] = ESCAPE_BYTE;
       ++escapedPayloadSize;
     }
