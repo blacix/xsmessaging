@@ -8,11 +8,11 @@
 
 int main() {
 
-  // connect sender and receiver
+  // implements sending data over real connection
+  // plus hooks sending and receiving for testing
   Hook hook;
 
   xsm::Sender sender(xsm::Escaping::ON, hook);
-
   Protocol protocol(sender);
   xsm::Receiver receiver(xsm::Escaping::ON, protocol);
 
