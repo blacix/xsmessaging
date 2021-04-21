@@ -1,17 +1,17 @@
-#include "xsmApp.h"
+#include "App.h"
 
 #include <iostream>
 
-#include "xsmAppUtils.h"
+#include "AppUtils.h"
 
 xsmApp::xsmApp() : mSender(*this), mReceiver(*this) {
   xsm::Message msg1{{'a', 'b', 'c', 'd'}, 4};
   msg1.Data[3] = xsm::FRAME_DELIMITER; // test escaping
-  mSender.sendMessage(msg1);
+  mSender.send(msg1);
 
   xsm::Message msg2{{'a', 'b', 'c', 'd'}, 4};
   msg2.Data[3] = xsm::ESCAPE_BYTE; // test escaping
-  mSender.sendMessage(msg2);
+  mSender.send(msg2);
 }
 
 void xsmApp::send(const uint8_t* data, const size_t size) {

@@ -140,8 +140,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="xsmCRC.cpp" />
-    <ClCompile Include="xsmAppUtils.cpp" />
-    <ClCompile Include="xsmApp.cpp" />
+    <ClCompile Include="AppUtils.cpp" />
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="xsmReceiver.cpp" />
     <ClCompile Include="xsmSender.cpp" />
     <ClCompile Include="main.cpp" />
@@ -156,8 +156,8 @@
     <ClInclude Include="xsmFrame.h" />
     <ClInclude Include="xsmTypes.h" />
     <ClInclude Include="xsmRingBuffer.h" />
-    <ClInclude Include="xsmAppUtils.h" />
-    <ClInclude Include="xsmApp.h" />
+    <ClInclude Include="AppUtils.h" />
+    <ClInclude Include="App.h" />
     <ClInclude Include="xsmReceiver.h" />
     <ClInclude Include="xsmSender.h" />
     <ClInclude Include="xsmUtils.h" />

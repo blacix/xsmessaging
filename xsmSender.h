@@ -10,14 +10,12 @@ namespace xsm {
 
 class Sender {
 public:
-  Sender(ISender& sender);
+  Sender(ISender& sendImpl);
   virtual ~Sender() = default;
-  virtual void sendMessage(const Message& message);
-
-protected:
-  ISender& mSender;
+  virtual void send(const Message& message);
 
 private:
+  ISender& mSendImpl;
   Message mEscapedPayload;
 };
 

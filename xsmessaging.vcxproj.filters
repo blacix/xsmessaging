@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xsmApp.cpp">
+    <ClCompile Include="App.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="xsmReceiver.cpp">
@@ -27,7 +27,7 @@
     <ClCompile Include="xsmSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xsmAppUtils.cpp">
+    <ClCompile Include="AppUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="xsmUtils.cpp">
@@ -41,7 +41,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="xsmApp.h">
+    <ClInclude Include="App.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xsmReceiver.h">
@@ -53,7 +53,7 @@
     <ClInclude Include="xsmRingBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="xsmAppUtils.h">
+    <ClInclude Include="AppUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xsmCRC.h">

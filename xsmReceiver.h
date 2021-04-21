@@ -14,14 +14,15 @@ namespace xsm {
 class Receiver {
 
 public:
-  enum class State { DELIMITER, SIZE, CRC_HEADER, PAYLOAD, CRC_PAYLOAD };
-
   Receiver(IReceiver& callback);
   ~Receiver() = default;
 
   void receive(const uint8_t byte);
 
 private:
+  enum class State { DELIMITER, SIZE, CRC_HEADER, PAYLOAD, CRC_PAYLOAD };
+
+
   void receiveDelimiter(const uint8_t byte);
   void receiveSize(const uint8_t byte);
   void receiveHeaderCrc(const uint8_t byte);

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "xsmApp.h"
+#include "App.h"
 int main() {
   xsmApp();
   getchar();

@@ -6,12 +6,12 @@
 
 using namespace xsm;
 
-Sender::Sender(ISender& callback) : mSender(callback) {}
+Sender::Sender(ISender& sendImpl) : mSendImpl(sendImpl) {}
 
-void Sender::sendMessage(const Message& message) {
+void Sender::send(const Message& message) {
   Utils::escape(message, mEscapedPayload);
   if (mEscapedPayload.Size > 0) {
     Frame frame{mEscapedPayload};
-    mSender.send(frame.getData().data(), frame.getSize());
+    mSendImpl.send(frame.getData().data(), frame.getSize());
   }
 }
