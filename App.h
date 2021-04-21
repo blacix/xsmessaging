@@ -5,17 +5,30 @@
 #include "xsmReceiver.h"
 #include "xsmSender.h"
 
-
-class xsmApp : public xsm::ISender, xsm::IReceiver {
+class Protocol : public xsm::IReceiver {
 public:
-  xsmApp();
-
-  void send(const uint8_t* data, const size_t size) override;
+  Protocol(xsm::Sender& sender);
   void onMessageReceived(const xsm::Message& message) override;
 
 private:
   xsm::Sender mSender;
-  xsm::Receiver mReceiver;
+};
+
+class Hook : public xsm::ISender {
+public:
+  Hook();
+  void send(const uint8_t* data, const size_t size);
+  void setReceiver(xsm::Receiver* receiver);
+
+private:
+  xsm::Receiver* mReceiver;
+};
+
+class xsmApp : xsm::IReceiver {
+public:
+  xsmApp();
+
+private:
 };
 
 #endif
