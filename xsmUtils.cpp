@@ -26,7 +26,7 @@ void Utils::escape(const Message& unescapedPayload, Message& escapedPayload) {
 
 size_t Utils::unescape(const MessageBuffer& escapedPayload,
                        const size_t escapedPayloadSize,
-                     MessageBuffer& unEscapedPayload) {
+                       MessageBuffer& unEscapedPayload) {
   int skippedBytes = 0;
   // helper variable to remove the first escape character only.
   // this is the case when the escape charcter is escaped in the payload
@@ -41,7 +41,7 @@ size_t Utils::unescape(const MessageBuffer& escapedPayload,
         // this byte is also the escape character
         unEscapedPayload[unescapedPayloadSize] = escapedPayload[i];
         ++unescapedPayloadSize;
-        
+
       } else {
         // prev byte was not the escape character
         // skip this byte

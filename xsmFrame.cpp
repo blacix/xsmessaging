@@ -1,4 +1,5 @@
 #include "xsmFrame.h"
+
 #include "xsmCRC.h"
 
 using namespace xsm;
@@ -31,7 +32,7 @@ void Frame::setEscapedPayloadBuffer(const MessageBuffer& payload) {
 
 void Frame::setEscapedPayload(const Message& payload) {
   mPayload = payload.Data;
-  //setPayloadSize(static_cast<uint8_t>(payload.Size));
+  // setPayloadSize(static_cast<uint8_t>(payload.Size));
 }
 
 void Frame::setPayloadCrc(const uint8_t crc) {
@@ -69,4 +70,3 @@ uint8_t Frame::getPayloadCrc() const {
 uint8_t Frame::getSize() const {
   return HEADER_SIZE + getPayloadSize() + FOOTER_SIZE;
 }
-

@@ -2,14 +2,20 @@
 #define XSM_APP
 #include <vector>
 
-#include "xsmDecoder.h"
-#include "xsmTypes.h"
+#include "xsmReceiver.h"
+#include "xsmSender.h"
 
-class xsmApp : public xsm::IMessageCallback {
+
+class xsmApp : public xsm::ISender, xsm::IReceiver {
 public:
   xsmApp();
 
-  void onMessageReceived(const xsm::Message message) override;
+  void send(const uint8_t* data, const size_t size) override;
+  void onMessageReceived(const xsm::Message& message) override;
+
+private:
+  xsm::Sender mSender;
+  xsm::Receiver mReceiver;
 };
 
 #endif

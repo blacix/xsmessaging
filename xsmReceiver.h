@@ -5,18 +5,19 @@
 #include <cstdint>
 #include <functional>
 
-#include "xsmTypes.h"
 #include "xsmFrame.h"
+#include "xsmIReceiver.h"
+#include "xsmTypes.h"
 
 namespace xsm {
 
-class Decoder {
+class Receiver {
 
 public:
   enum class State { DELIMITER, SIZE, CRC_HEADER, PAYLOAD, CRC_PAYLOAD };
 
-  Decoder(IFrameCallback& callback);
-  ~Decoder() = default;
+  Receiver(IReceiver& callback);
+  ~Receiver() = default;
 
   void receive(const uint8_t byte);
 
@@ -30,8 +31,11 @@ private:
   void payloadToCrcPayload(const uint8_t byte);
   void reset();
 
+  void processFrame();
+
+  IReceiver& mCallback;
+
   State mState;
-  IFrameCallback& mCallback;
   uint8_t mPrevByte;
   unsigned long long mDiscardedBytes;
 

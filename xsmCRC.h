@@ -1,8 +1,8 @@
 #ifndef _XSM_CRC_H
 #define _XSM_CRC_H
 
-#include <cstdint>
 #include <cstddef>
+#include <cstdint>
 
 namespace xsm {
 // CRC for Maxim/Dallas 1-Wire

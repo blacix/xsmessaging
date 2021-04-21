@@ -1,7 +1,7 @@
 #include <iostream>
+
 #include "xsmApp.h"
-int main()
-{
-    xsmApp();
-    getchar();
+int main() {
+  xsmApp();
+  getchar();
 }
