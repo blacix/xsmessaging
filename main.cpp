@@ -8,8 +8,8 @@
 
 int main() {
 
-  // implements sending data over real connection
-  // plus hooks sending and receiving for testing
+  // implements sending data over real connection required by xsm::Sending
+  // by hooking sending and receiving together for testing
   Hook hook;
 
   xsm::Sender sender(xsm::Escaping::ON, hook);
