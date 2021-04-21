@@ -34,9 +34,6 @@ public:
 };
 
 
-// using MessageCallback = std::function<void(const xsm::Message)>;
-// using ErrorCallback = std::function<void(const ErrorCode)>;
-
 } // namespace xsm
 
 #endif

@@ -1,11 +1,11 @@
-#include "xsmDecoder.h"
+#include "xsmReceiver.h"
 
 #include "xsmCRC.h"
 #include "xsmUtils.h"
 
 using namespace xsm;
 
-Decoder::Decoder(IFrameCallback& callback) :
+Receiver::Receiver(IReceiver& callback) :
     mState(State::DELIMITER),
     mCallback(callback),
     mPrevByte(FRAME_DELIMITER),
@@ -15,7 +15,7 @@ Decoder::Decoder(IFrameCallback& callback) :
   mFrame.setPayloadSize(0);
 }
 
-void Decoder::receive(const uint8_t byte) {
+void Receiver::receive(const uint8_t byte) {
   switch (mState) {
     case State::DELIMITER:
       receiveDelimiter(byte);
@@ -42,7 +42,7 @@ void Decoder::receive(const uint8_t byte) {
   }
 }
 
-void Decoder::receiveDelimiter(const uint8_t byte) {
+void Receiver::receiveDelimiter(const uint8_t byte) {
   if (byte == FRAME_DELIMITER2 && mPrevByte == FRAME_DELIMITER) {
     // Frame sets this in contructor
     mState = State::SIZE;
@@ -50,7 +50,7 @@ void Decoder::receiveDelimiter(const uint8_t byte) {
   mPrevByte = byte;
 }
 
-void Decoder::receiveSize(const uint8_t byte) {
+void Receiver::receiveSize(const uint8_t byte) {
   if (byte <= MAX_PAYLOAD_SIZE) {
     mFrame.setPayloadSize(byte);
     mState = State::CRC_HEADER;
@@ -59,7 +59,7 @@ void Decoder::receiveSize(const uint8_t byte) {
   }
 }
 
-void Decoder::receiveHeaderCrc(const uint8_t byte) {
+void Receiver::receiveHeaderCrc(const uint8_t byte) {
   if (crc8(mFrame.getHeaderBuffer().data(), HEADER_SIZE - 1) == byte) {
     mFrame.setHeaderCrc(byte);
     mState = State::PAYLOAD;
@@ -68,7 +68,7 @@ void Decoder::receiveHeaderCrc(const uint8_t byte) {
   }
 }
 
-void Decoder::receivePayload(const uint8_t byte) {
+void Receiver::receivePayload(const uint8_t byte) {
   if (mPotentialPayload.Size < mFrame.getPayloadSize()) {
     bool escaped = mPrevByte == ESCAPE_BYTE;
 
@@ -99,18 +99,18 @@ void Decoder::receivePayload(const uint8_t byte) {
   }
 }
 
-void Decoder::receivePayloadCrc(const uint8_t byte) {
+void Receiver::receivePayloadCrc(const uint8_t byte) {
   mPayloadCrc = crc8(mPotentialPayload.Data.data(), mFrame.getPayloadSize());
   if (mPayloadCrc == byte) {
     mFrame.setEscapedPayload(mPotentialPayload);
     mFrame.setPayloadCrc(mPayloadCrc);
-    mCallback.onFrameReceived(mFrame);
+    processFrame();
   }
 
   reset();
 }
 
-void Decoder::payloadToCrcPayload(const uint8_t byte) {
+void Receiver::payloadToCrcPayload(const uint8_t byte) {
   mPotentialPayload.Data[mPotentialPayload.Size] = byte;
   ++mPotentialPayload.Size;
   mPrevByte = byte;
@@ -120,10 +120,17 @@ void Decoder::payloadToCrcPayload(const uint8_t byte) {
   }
 }
 
-void Decoder::reset() {
+void Receiver::reset() {
   mState = State::DELIMITER;
   mPrevByte = FRAME_DELIMITER;
   mPotentialPayload.Size = 0;
   mFrame.setHeaderCrc(0);
   mFrame.setPayloadSize(0);
+}
+
+
+void Receiver::processFrame() {
+  Message message;
+  message.Size = Utils::unescape(mFrame.getPayloadBuffer(), mFrame.getPayloadSize(), message.Data);
+  mCallback.onMessageReceived(message);
 }

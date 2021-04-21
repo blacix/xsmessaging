@@ -1,9 +1,10 @@
-﻿#include "xsmAppUtils.h"
+﻿#include "AppUtils.h"
+
 #include <chrono>
 #include <cinttypes>
+#include <iostream>
 #include <iterator>
 #include <sstream>
-#include <iostream>
 
 #include "xsmTypes.h"
 
@@ -67,12 +68,11 @@ long long AppUtils::getCurrentTimestamp() {
   return ms.count();
 }
 
-void AppUtils::print(const uint8_t* packet, size_t packetSize) { 
-   std::stringstream ss;
-   ss << std::hex;
-   for (size_t i = 0; i < packetSize; i++)
-  {
-     ss << "0x" << (int)packet[i] << " ";
+void AppUtils::print(const uint8_t* packet, size_t packetSize) {
+  std::stringstream ss;
+  ss << std::hex;
+  for (size_t i = 0; i < packetSize; i++) {
+    ss << "0x" << (int)packet[i] << " ";
   }
-   std::cout << ss.str() << std::endl;
+  std::cout << ss.str() << std::endl;
 }
