@@ -3,6 +3,7 @@ using namespace xsm;
 
 Frame::Frame() {
   mHeader[0] = FRAME_DELIMITER;
+  mHeader[1] = FRAME_DELIMITER2;
   setPayloadSize(0);
   mPayloadCrc = 0;
 }

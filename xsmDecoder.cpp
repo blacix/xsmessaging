@@ -43,10 +43,11 @@ void Decoder::receive(const uint8_t byte) {
 }
 
 void Decoder::receiveDelimiter(const uint8_t byte) {
-  if (byte == FRAME_DELIMITER) {
+  if (byte == FRAME_DELIMITER2 && mPrevByte == FRAME_DELIMITER) {
     // Frame sets this in contructor
     mState = State::SIZE;
   }
+  mPrevByte = byte;
 }
 
 void Decoder::receiveSize(const uint8_t byte) {
