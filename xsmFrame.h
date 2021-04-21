@@ -12,15 +12,15 @@ public:
   Frame(const Message& payload);
   void setPayloadSize(const uint8_t length);
   void setHeaderCrc(const uint8_t crc);
-  void setEscapedPayloadBuffer(const MessageBuffer& payload);
-  void setEscapedPayload(const Message& payload);
+  void setPayloadBuffer(const MessageBuffer& payload);
+  void setPayload(const Message& payload);
   void setPayloadCrc(const uint8_t crc);
 
   const HeaderBuffer& getHeaderBuffer() const;
   uint8_t getPayloadSize() const;
   uint8_t getHeaderCrc() const;
   const MessageBuffer& getPayloadBuffer() const;
-  const FrameBuffer getData() const;
+  const FrameBuffer getFrameBuffer() const;
   uint8_t getPayloadCrc() const;
   uint8_t getSize() const;
 

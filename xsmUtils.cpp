@@ -2,7 +2,7 @@
 
 using namespace xsm;
 
-void Utils::escape(const Message& unescapedPayload, Message& escapedPayload) {
+bool Utils::escape(const Message& unescapedPayload, Message& escapedPayload) {
 
   size_t escapedPayloadSize = 0;
   // iterate through the input payload buffer and insert escaped payload in the
@@ -21,6 +21,7 @@ void Utils::escape(const Message& unescapedPayload, Message& escapedPayload) {
     }
   }
   escapedPayload.Size = escapedPayloadSize;
+  return escapedPayloadSize != 0;
 }
 
 

@@ -10,13 +10,13 @@ Sender::Sender(const Escaping escaping, ISender& sendImpl) : mEscaping(escaping)
 
 void Sender::send(const Message& message) {
   if (mEscaping == Escaping::ON) {
-    Utils::escape(message, mEscapedPayload);
-    if (mEscapedPayload.Size > 0) {
+    bool success = Utils::escape(message, mEscapedPayload);
+    if (success > 0) {
       Frame frame{mEscapedPayload};
-      mSendImpl.send(frame.getData().data(), frame.getSize());
+      mSendImpl.send(frame.getFrameBuffer().data(), frame.getSize());
     }
   } else {
     Frame frame{message};
-    mSendImpl.send(frame.getData().data(), frame.getSize());
+    mSendImpl.send(frame.getFrameBuffer().data(), frame.getSize());
   }
 }

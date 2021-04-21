@@ -107,7 +107,7 @@ void Receiver::receivePayload(const uint8_t byte) {
 void Receiver::receivePayloadCrc(const uint8_t byte) {
   mPayloadCrc = crc8(mPotentialPayload.Data.data(), mFrame.getPayloadSize());
   if (mPayloadCrc == byte) {
-    mFrame.setEscapedPayload(mPotentialPayload);
+    mFrame.setPayload(mPotentialPayload);
     mFrame.setPayloadCrc(mPayloadCrc);
     processFrame();
   }
@@ -141,7 +141,7 @@ void Receiver::processFrame() {
     mCallback.onMessageReceived(message);
   } else {
     message.Size = mFrame.getPayloadSize();
-    message.Data = mFrame.getPayloadBuffer();
+    std::copy(mFrame.getPayloadBuffer().begin(), mFrame.getPayloadBuffer().end(), message.Data.begin());
     mCallback.onMessageReceived(message);
   }
 }
