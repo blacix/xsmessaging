@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\serializer">
+      <UniqueIdentifier>{4512433f-a79e-4f66-8b95-f7140f966f7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\serializer">
+      <UniqueIdentifier>{c8123378-358a-4ba9-aa11-43ee5867f1df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -38,6 +44,12 @@
     </ClCompile>
     <ClCompile Include="xsmFrame.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="serializer\serializer.cpp">
+      <Filter>Source Files\serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="serializer\serializerbuffer.cpp">
+      <Filter>Source Files\serializer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +88,18 @@
     </ClInclude>
     <ClInclude Include="xsmIReceiver.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="serializer\BanCopyMove.h">
+      <Filter>Header Files\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="serializer\serializer.h">
+      <Filter>Header Files\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="serializer\serializerbuffer.h">
+      <Filter>Header Files\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="serializer\serializerdummy.h">
+      <Filter>Header Files\serializer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

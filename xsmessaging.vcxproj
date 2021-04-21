@@ -139,6 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="serializer\serializer.cpp" />
+    <ClCompile Include="serializer\serializerbuffer.cpp" />
     <ClCompile Include="xsmCRC.cpp" />
     <ClCompile Include="AppUtils.cpp" />
     <ClCompile Include="App.cpp" />
@@ -149,6 +151,10 @@
     <ClCompile Include="xsmUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="serializer\BanCopyMove.h" />
+    <ClInclude Include="serializer\serializer.h" />
+    <ClInclude Include="serializer\serializerbuffer.h" />
+    <ClInclude Include="serializer\serializerdummy.h" />
     <ClInclude Include="xsmIReceiver.h" />
     <ClInclude Include="xsmISender.h" />
     <ClInclude Include="xsmCRC.h" />
