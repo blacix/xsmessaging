@@ -30,13 +30,13 @@ void Protocol::onMessageReceived(const xsm::Message& message) {
 }
 
 
-Hook::Hook() {}
-void Hook::send(const uint8_t* data, const size_t size) {
+Connection::Connection() {}
+void Connection::send(const uint8_t* data, const size_t size) {
   for (size_t i = 0; i < size; ++i) {
     mReceiver->receive(data[i]);
   }
 }
 
-void Hook::setReceiver(xsm::Receiver* receiver) {
+void Connection::setReceiver(xsm::Receiver* receiver) {
   mReceiver = receiver;
 }

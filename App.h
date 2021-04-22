@@ -14,9 +14,9 @@ private:
   xsm::Sender mSender;
 };
 
-class Hook : public xsm::ISender {
+class Connection : public xsm::ISender {
 public:
-  Hook();
+  Connection();
   void send(const uint8_t* data, const size_t size);
   void setReceiver(xsm::Receiver* receiver);
 
@@ -24,11 +24,5 @@ private:
   xsm::Receiver* mReceiver;
 };
 
-class xsmApp : xsm::IReceiver {
-public:
-  xsmApp();
-
-private:
-};
 
 #endif

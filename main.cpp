@@ -8,15 +8,19 @@
 
 int main() {
 
-  // implements sending data over real connection required by xsm::Sending
+  // implements sending data over real connection 
   // by hooking sending and receiving together for testing
-  Hook hook;
+  Connection connection;
 
-  xsm::Sender sender(xsm::Escaping::ON, hook);
+  xsm::Sender sender(xsm::Escaping::ON, connection);
+
+  // a test protocol impl. over stream based connection
   Protocol protocol(sender);
+
   xsm::Receiver receiver(xsm::Escaping::ON, protocol);
 
-  hook.setReceiver(&receiver);
+  // for testing: hooking rx and tx
+  connection.setReceiver(&receiver);
 
 
   // test sending
