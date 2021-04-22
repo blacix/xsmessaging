@@ -18,8 +18,8 @@ typedef std::array<uint8_t, HEADER_SIZE> HeaderBuffer;
 typedef RingBufferT<INPUT_BUFFER_SIZE> RingBuffer;
 
 struct Message {
-  MessageBuffer Data;
-  uint32_t Size = 0;
+  MessageBuffer Data{};
+  size_t Size = 0;
 };
 
 enum class Escaping {

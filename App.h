@@ -8,7 +8,7 @@
 class Protocol : public xsm::IReceiver {
 public:
   Protocol(xsm::Sender& sender);
-  void onMessageReceived(const xsm::Message& message) override;
+  void onMessageReceived(const xsm::Message message) override;
 
 private:
   xsm::Sender mSender;

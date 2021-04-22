@@ -8,7 +8,7 @@
 namespace xsm {
 class IReceiver {
 public:
-  virtual void onMessageReceived(const Message& message) = 0;
+  virtual void onMessageReceived(const Message message) = 0;
 };
 } // namespace xsm
 

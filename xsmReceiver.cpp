@@ -10,7 +10,8 @@ Receiver::Receiver(const Escaping escaping, IReceiver& callback) :
     mCallback(callback),
     mState(State::DELIMITER),
     mPrevByte(FRAME_DELIMITER),
-    mDiscardedBytes(0) {
+    mDiscardedBytes(0),
+    mPayloadCrc{0} {
   mPotentialPayload.Size = 0;
   mFrame.setHeaderCrc(0);
   mFrame.setPayloadSize(0);
@@ -76,6 +77,9 @@ void Receiver::receiveHeaderCrc(const uint8_t byte) {
 }
 
 void Receiver::receivePayload(const uint8_t byte) {
+  // - MAX_PAYLOAD_SIZE is checked in receiveSize
+  // - checking if all payload has been received is performed in storePayload
+  // checking if something's gone wrong.
   if (mPotentialPayload.Size < mFrame.getPayloadSize()) {
     if (mEscaping == Escaping::ON) {
       if (mPrevByte == ESCAPE_BYTE) {
@@ -138,10 +142,10 @@ void Receiver::processFrame() {
   Message message;
   if (mEscaping == Escaping::ON) {
     message.Size = Utils::unescape(mFrame.getPayloadBuffer(), mFrame.getPayloadSize(), message.Data);
-    mCallback.onMessageReceived(message);
+    mCallback.onMessageReceived(std::move(message));
   } else {
     message.Size = mFrame.getPayloadSize();
     std::copy(mFrame.getPayloadBuffer().begin(), mFrame.getPayloadBuffer().end(), message.Data.begin());
-    mCallback.onMessageReceived(message);
+    mCallback.onMessageReceived(std::move(message));
   }
 }

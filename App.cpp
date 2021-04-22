@@ -8,7 +8,7 @@
 
 Protocol::Protocol(xsm::Sender& sender) : mSender(sender) {}
 
-void Protocol::onMessageReceived(const xsm::Message& message) {
+void Protocol::onMessageReceived(const xsm::Message message) {
   // std::cout << "message received" << std::endl;
   AppUtils::print(message.Data.data(), message.Size);
   std::cout << std::endl;
